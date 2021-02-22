@@ -1,2 +1,5 @@
-# blog application
-# flask & deployment practice
+blog application
+
+flask & deployment practice
+
+not running yet
