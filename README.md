@@ -1,1 +1,2 @@
-# flask-practice-2
+# blog application
+# flask & deployment practice
