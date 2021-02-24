@@ -1,34 +1,33 @@
 {% macro render_pagination(pagination, endpoint) %}
-  <hr>
-  <nav>
+  <nav style="margin-top: 35px;">
     <ul class="pagination">
-      <li>
-        <a href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
+      <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}" aria-label="Previous">
+          <span aria-hidden="true">Previous</span>
         </a>
       </li>
       {% for page in pagination.iter_pages() %}
         {% if page %}
           {% if page != pagination.page %}
-            <li>
-              <a href="{{ url_for(endpoint, page=page, **kwargs) }}">
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for(endpoint, page=page, **kwargs) }}">
                 {{ page }}
               </a>
             </li>
           {% else %}
-            <li>
-              <a href="">
+            <li class="page-item active">
+              <a class="page-link" href="">
                 {{ page }}
               </a>
             </li>
           {% endif %}
         {% else %}
-          <li><a>...</a></li>
+          <li class="page-item"><a class="page-link">...</a></li>
         {% endif %}
       {% endfor %}
-      <li>
-        <a href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
+      <li class="page-item {% if pagination.next().page > pagination.pages %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}" aria-label="Next">
+          <span aria-hidden="true">Next</span>
         </a>
       </li>
     </ul>
