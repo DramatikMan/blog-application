@@ -1,28 +1,33 @@
 {% macro render_pagination(pagination, endpoint) %}
+  <hr>
   <nav>
     <ul class="pagination">
       <li>
-        <a href="{{ url_for('home', page=pagination.prev().page) }}" aria-label="Previous">
+        <a href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       {% for page in pagination.iter_pages() %}
         {% if page %}
-          {% if page != paginaton.page %}
+          {% if page != pagination.page %}
             <li>
-                <a href="{{ url_for(endpoint, page=page) }}">
-                  {{ page }}
-                </a>
+              <a href="{{ url_for(endpoint, page=page, **kwargs) }}">
+                {{ page }}
+              </a>
             </li>
           {% else %}
-            <li><a href="">{{ page }}</a></li>
+            <li>
+              <a href="">
+                {{ page }}
+              </a>
+            </li>
           {% endif %}
         {% else %}
           <li><a>...</a></li>
         {% endif %}
       {% endfor %}
       <li>
-        <a href="{{ url_for('home', page=pagination.next().page) }}" aria-label="Next">
+        <a href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -48,6 +53,6 @@
       {% block body %}
       {% endblock %}
     </div>
-      <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   </body>
 </html>

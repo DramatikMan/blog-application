@@ -36,7 +36,8 @@ def home(page=1):
 
 
 @app.route('/post/<int:post_id>', methods=['GET', 'POST'])
-def post(post_id):
+@app.route('/post/<int:post_id>/<int:page>', methods=['GET', 'POST'])
+def post(post_id, page=1):
     form = CommentForm()
     if form.validate_on_submit():
         new_comment = Comment()
@@ -46,10 +47,11 @@ def post(post_id):
         new_comment.dt = datetime.datetime.now()
         db.session.add(new_comment)
         db.session.commit()
+        return flask.redirect(str(post_id))
 
     post = Post.query.get_or_404(post_id)
     tags = post.tags
-    comments = post.comments.order_by(Comment.dt.desc()).all()
+    comments = post.comments.order_by(Comment.dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
     return flask.render_template(
@@ -64,9 +66,10 @@ def post(post_id):
 
 
 @app.route('/tag/<tag_name>')
-def tag(tag_name):
+@app.route('/tag/<tag_name>/<int:page>')
+def tag(tag_name, page=1):
     tag = Tag.query.filter_by(title=tag_name).first_or_404()
-    posts = tag.posts.order_by(Post.publish_dt.desc()).all()
+    posts = tag.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
     return flask.render_template(
@@ -79,12 +82,13 @@ def tag(tag_name):
 
 
 @app.route('/user/<username>')
-def user(username):
+@app.route('/user/<username>/<int:page>')
+def user(username, page=1):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = user.posts.order_by(Post.publish_dt.desc()).all()
+    posts = user.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return render_template(
+    return flask.render_template(
         'user.html',
         user=user,
         posts=posts,
