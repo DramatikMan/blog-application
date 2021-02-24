@@ -1,10 +1,12 @@
+import datetime
 import flask
 from flask_migrate import Migrate
 
 from config import DevConfig
-import database
+from database import *
 from commands import cmd
 from models import *
+from forms import *
 
 
 app = flask.Flask(__name__)
@@ -12,9 +14,9 @@ app = flask.Flask(__name__)
 app.config.from_object(DevConfig)
 app.url_map.strict_slashes = False
 
-database.init_app(app)
+init_app(app)
 app.register_blueprint(cmd)
-migrate = Migrate(app, database.db)
+migrate = Migrate(app, db)
 
 
 @app.route('/')
@@ -33,8 +35,18 @@ def home(page=1):
     )
 
 
-@app.route('/post/<int:post_id>')
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def post(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        new_comment = Comment()
+        new_comment.name = form.name.data
+        new_comment.text = form.text.data
+        new_comment.post_id = post_id
+        new_comment.dt = datetime.datetime.now()
+        db.session.add(new_comment)
+        db.session.commit()
+
     post = Post.query.get_or_404(post_id)
     tags = post.tags
     comments = post.comments.order_by(Comment.dt.desc()).all()
@@ -46,7 +58,8 @@ def post(post_id):
         tags=tags,
         comments=comments,
         recent=recent,
-        top_tags=top_tags
+        top_tags=top_tags,
+        form=form
     )
 
 
