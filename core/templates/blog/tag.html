@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}User{% endblock %}
+{% block title %}Tag{% endblock %}
 {% block body %}
   <div class="row">
-    <h4>Posts by author: {{ user.username }}</h4>
+    <h4>Posts by tag: &laquo;{{ tag.title }}&raquo;</h4>
     <hr>
   </div>
   {% for post in posts.items %}
@@ -12,9 +12,9 @@
     </div>
     <div class="col-lg-12">
       {{ post.text | truncate(255) | safe }}
-      <a href="{{ url_for('post', post_id=post.id) }}">...more</a>
+      <a href="{{ url_for('.post', post_id=post.id) }}">...more</a>
     </div>
   </div>
   {% endfor %}
-  {{ render_pagination(posts, 'user', username=user.username) }}
+  {{ render_pagination(posts, '.tag', tag_name=tag.title) }}
 {% endblock %}

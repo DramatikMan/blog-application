@@ -1,26 +1,36 @@
+import os
 import datetime
+
 import flask
-from flask_migrate import Migrate
+from sqlalchemy import text, func
 
-from config import DevConfig
-from database import *
-from commands import cmd
-from models import *
-from forms import *
+from core.models import *
+from core.forms import CommentForm
 
 
-app = flask.Flask(__name__)
-
-app.config.from_object(DevConfig)
-app.url_map.strict_slashes = False
-
-init_app(app)
-app.register_blueprint(cmd)
-migrate = Migrate(app, db)
+bp_blog = flask.Blueprint(
+    'blog',
+    __name__,
+    template_folder=os.path.join(os.pardir, 'templates', 'blog'),
+    url_prefix='/blog'
+)
 
 
-@app.route('/')
-@app.route('/<int:page>')
+def sidebar_data():
+    recent = Post.query.order_by(
+        Post.publish_dt.desc()
+    ).limit(5).all()
+    top_tags = db.session.query(
+        Tag, func.count(tags.c.post_id).label('total')
+    ).join(
+        tags
+    ).group_by(Tag).order_by(text('total DESC')).limit(5).all()
+
+    return recent, top_tags
+
+
+@bp_blog.route('/')
+@bp_blog.route('/<int:page>')
 def home(page=1):
     posts = Post.query.order_by(
         Post.publish_dt.desc()
@@ -35,8 +45,8 @@ def home(page=1):
     )
 
 
-@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
-@app.route('/post/<int:post_id>/<int:page>', methods=['GET', 'POST'])
+@bp_blog.route('/post/<int:post_id>', methods=['GET', 'POST'])
+@bp_blog.route('/post/<int:post_id>/<int:page>', methods=['GET', 'POST'])
 def post(post_id, page=1):
     form = CommentForm()
     if form.validate_on_submit():
@@ -65,8 +75,8 @@ def post(post_id, page=1):
     )
 
 
-@app.route('/tag/<tag_name>')
-@app.route('/tag/<tag_name>/<int:page>')
+@bp_blog.route('/tag/<tag_name>')
+@bp_blog.route('/tag/<tag_name>/<int:page>')
 def tag(tag_name, page=1):
     tag = Tag.query.filter_by(title=tag_name).first_or_404()
     posts = tag.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
@@ -81,8 +91,8 @@ def tag(tag_name, page=1):
     )
 
 
-@app.route('/user/<username>')
-@app.route('/user/<username>/<int:page>')
+@bp_blog.route('/user/<username>')
+@bp_blog.route('/user/<username>/<int:page>')
 def user(username, page=1):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
@@ -95,7 +105,3 @@ def user(username, page=1):
         recent=recent,
         top_tags=top_tags
     )
-
-
-if __name__ == '__main__':
-    app.run()

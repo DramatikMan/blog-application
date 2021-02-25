@@ -1,5 +1,13 @@
-from database import db
-from sqlalchemy import text, func
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
+
+
+tags = db.Table('post_x_tags',
+    db.Column('post_id', db.Integer(), db.ForeignKey('post.id')),
+    db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id'))
+)
 
 
 class User(db.Model):
@@ -19,12 +27,6 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User '{self.username}'>"
-
-
-tags = db.Table('post_x_tags',
-    db.Column('post_id', db.Integer(), db.ForeignKey('post.id')),
-    db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id'))
-)
 
 
 class Post(db.Model):
@@ -75,16 +77,3 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f"<Tag '{self.title}'>"
-
-
-def sidebar_data():
-    recent = Post.query.order_by(
-        Post.publish_dt.desc()
-    ).limit(5).all()
-    top_tags = db.session.query(
-        Tag, func.count(tags.c.post_id).label('total')
-    ).join(
-        tags
-    ).group_by(Tag).order_by(text('total DESC')).limit(5).all()
-
-    return recent, top_tags
