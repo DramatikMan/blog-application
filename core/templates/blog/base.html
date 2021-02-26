@@ -34,7 +34,24 @@
   </nav>
 {% endmacro %}
 
-{% macro form %}
+{% macro render_form(endpoint, button_text) %}
+  <form method="POST" action="{{ url_for(endpoint, **kwargs) }}">
+    {{ form.hidden_tag() }}
+    {% for attr in form %}
+      {% if 'CSRF' not in attr.label|string %}
+        <div class="form-group">
+            {{ attr.label }}
+            {% if attr.errors %}
+              {% for e in attr.errors %}
+                <p class="help-block">{{ e }}</p>
+              {% endfor %}
+            {% endif %}
+            {{ attr(class_='form-control') }}
+        </div>
+      {% endif %}
+    {% endfor %}
+    <input class="btn btn-primary" type="submit" value="{{ button_text }}" style="margin-top: 15px;">
+  </form>
 {% endmacro %}
 
 <!DOCTYPE html>
@@ -43,13 +60,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Blog{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   </head>
   <body>
     <div class="container">
       <div class="jumbotron">
-        <h1><a href="{{ url_for('.home') }}">My Blog</a></h1>
+        <h1><a href="{{ url_for('blog.home') }}">My Blog</a></h1>
           <p>Welcome to the blog!</p>
       </div>
       {% with messages = get_flashed_messages(with_categories=true) %}

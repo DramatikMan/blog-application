@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block body %}
+  <h4 style="margin-top: 50px;">Enter your credentials:</h4>
+  <div class="col-lg-4">
+    <div class="row shadow p-3 mb-2 bg-body rounded">
+      {{ render_form('.register', 'Register') }}
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}

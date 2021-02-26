@@ -20,7 +20,8 @@
           <h5>Recent Posts</h5>
           <ul style="margin-left: 25px;">
             {% for post in recent %}
-            <li><a href="{{ url_for('.post', post_id=post.id) }}">{{ post.title }}</a></li>
+            <li>
+              <a href="{{ url_for('.post', post_id=post.id) }}">{{ post.title }}</a>
             {% endfor %}
           </ul>
         </div>
