@@ -1,17 +1,16 @@
-import os
 import datetime
 
 import flask
 from sqlalchemy import text, func
 
-from core.models import *
+from core.models import db, tags, User, Post, Comment, Tag
 from core.forms import CommentForm
 
 
 bp_blog = flask.Blueprint(
     'blog',
     __name__,
-    template_folder=os.path.join(os.pardir, 'templates', 'blog'),
+    template_folder=('../templates/blog'),
     url_prefix='/blog'
 )
 

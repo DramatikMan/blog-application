@@ -1,10 +1,11 @@
 import os
 
 import flask
-from flask_migrate import Migrate
 
+from core.extensions import migrate, bcrypt
 from core.models import db, tags, User, Post, Comment, Tag
 from core.commands import cmd
+from core.controllers.main import bp_main
 from core.controllers.blog import bp_blog
 
 
@@ -20,24 +21,25 @@ def create_app():
     app.url_map.strict_slashes = False
 
     db.init_app(app)
-    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
 
-    @app.route('/')
-    def index():
-        return flask.redirect(flask.url_for('blog.home'))
-
+    # flask CLI utility
     app.register_blueprint(cmd)
+
+    app.register_blueprint(bp_main)
     app.register_blueprint(bp_blog)
 
+    # flask shell utility
     @app.shell_context_processor
     def make_shell_context():
         return dict(
             app=app,
             db=db,
+            tags=tags,
             User=User,
             Post=Post,
             Comment=Comment,
-            tags=tags,
             Tag=Tag
         )
 

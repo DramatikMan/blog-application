@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
+from core.extensions import bcrypt
+
 
 db = SQLAlchemy()
 
@@ -27,6 +29,12 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User '{self.username}'>"
+
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(password).decode()
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
 
 
 class Post(db.Model):
