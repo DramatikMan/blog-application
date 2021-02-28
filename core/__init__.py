@@ -2,7 +2,7 @@ import os
 
 import flask
 
-from core.extensions import migrate, bcrypt
+from core.extensions import migrate, bcrypt, oid
 from core.models import db, tags, User, Post, Comment, Tag
 from core.commands import cmd
 from core.controllers.main import bp_main
@@ -23,6 +23,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
+    oid.init_app(app)
 
     # flask CLI utility
     app.register_blueprint(cmd)

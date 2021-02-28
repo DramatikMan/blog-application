@@ -4,7 +4,7 @@ import flask
 from sqlalchemy import text, func
 
 from core.models import db, tags, User, Post, Comment, Tag
-from core.forms import CommentForm
+from core.forms import CommentForm, PostForm
 
 
 bp_blog = flask.Blueprint(
@@ -28,6 +28,40 @@ def sidebar_data():
     return recent, top_tags
 
 
+@bp_blog.route('/new', methods=['GET', 'POST'])
+def new_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        new_post = Post(form.title.data)
+        new_post.text = form.text.data
+        new_post.publish_dt = datetime.datetime.now()
+
+        db.session.add(new_post)
+        db.session.commit()
+
+    return flask.render_template('new.html', form=form)
+
+
+@bp_blog.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit_post(id):
+    post = Post.query.get_or_404(id)
+    form = PostForm()
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.text = form.text.data
+        post.publish_dt = datetime.datetime.now()
+
+        db.session.add(post)
+        db.session.commit()
+
+        return flask.redirect(flask.url_for('.post', post_id=post.id))
+
+    form.text.data = post.text
+    return flask.render_template('edit.html', form=form, post=post)
+
+
 @bp_blog.route('/')
 @bp_blog.route('/<int:page>')
 def home(page=1):
@@ -48,14 +82,17 @@ def home(page=1):
 @bp_blog.route('/post/<int:post_id>/<int:page>', methods=['GET', 'POST'])
 def post(post_id, page=1):
     form = CommentForm()
+
     if form.validate_on_submit():
         new_comment = Comment()
         new_comment.name = form.name.data
         new_comment.text = form.text.data
         new_comment.post_id = post_id
         new_comment.dt = datetime.datetime.now()
+
         db.session.add(new_comment)
         db.session.commit()
+
         return flask.redirect(str(post_id))
 
     post = Post.query.get_or_404(post_id)
