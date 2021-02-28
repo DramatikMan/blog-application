@@ -1,10 +1,13 @@
 import datetime
 
 import flask
+from flask_login import login_required, current_user
+from flask_principal import Permission, UserNeed
 from sqlalchemy import text, func
 
 from core.models import db, tags, User, Post, Comment, Tag
 from core.forms import CommentForm, PostForm
+from core.extensions import poster_permission, admin_permission
 
 
 bp_blog = flask.Blueprint(
@@ -28,7 +31,18 @@ def sidebar_data():
     return recent, top_tags
 
 
+# @bp_blog.before_request
+# def check_user():
+#     if 'username' in flask.session:
+#         g.current_user = User.query.filter_by(
+#             username=flask.session['username']
+#         ).one()
+#     else:
+#         g.current_user = None
+
+
 @bp_blog.route('/new', methods=['GET', 'POST'])
+@login_required
 def new_post():
     form = PostForm()
 
@@ -36,30 +50,42 @@ def new_post():
         new_post = Post(form.title.data)
         new_post.text = form.text.data
         new_post.publish_dt = datetime.datetime.now()
+        new_post.user_id = current_user.get_id()
 
         db.session.add(new_post)
         db.session.commit()
+
+        return flask.redirect(flask.url_for('.post', post_id=new_post.id))
 
     return flask.render_template('new.html', form=form)
 
 
 @bp_blog.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@poster_permission.require(http_exception=403)
 def edit_post(id):
     post = Post.query.get_or_404(id)
-    form = PostForm()
+    if current_user != post.user:
+        flask.abort(403)
 
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.text = form.text.data
-        post.publish_dt = datetime.datetime.now()
+    permission = Permission(UserNeed(post.user.id))
+    if permission.can() or admin_permission.can():
+        form = PostForm()
 
-        db.session.add(post)
-        db.session.commit()
+        if form.validate_on_submit():
+            post.title = form.title.data
+            post.text = form.text.data
+            post.publish_dt = datetime.datetime.now()
 
-        return flask.redirect(flask.url_for('.post', post_id=post.id))
+            db.session.add(post)
+            db.session.commit()
 
-    form.text.data = post.text
-    return flask.render_template('edit.html', form=form, post=post)
+            return flask.redirect(flask.url_for('.post', post_id=post.id))
+
+        form.text.data = post.text
+        return flask.render_template('edit.html', form=form, post=post)
+    else:
+        flask.abort(403)
 
 
 @bp_blog.route('/')

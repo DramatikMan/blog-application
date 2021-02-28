@@ -1,4 +1,8 @@
+import json
+
 import flask
+from flask_login import login_user, logout_user, login_required, current_user
+from flask_principal import Identity, AnonymousIdentity, identity_changed
 
 from core.models import db, User
 from core.extensions import oid
@@ -54,6 +58,14 @@ def index():
 #     )
 
 
+@bp_main.route('/current_user', methods=['GET'])
+def who_is_current_user():
+    cu_dict = {}
+    for item in dir(current_user):
+        cu_dict[str(item)] = str(getattr(current_user, str(item)))
+    return flask.jsonify(cu_dict)
+
+
 @bp_main.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
@@ -68,6 +80,15 @@ def login():
         )
 
     if form.validate_on_submit():
+        # flask.session['username'] = form.username.data
+        user = User.query.filter_by(username=form.username.data).one()
+        login_user(user, remember=form.remember.data)
+
+        identity_changed.send(
+            flask.current_app._get_current_object(),
+            identity=Identity(user.id)
+        )
+
         flask.flash('You have been logged in.', category='success')
         return flask.redirect(flask.url_for('blog.home'))
 
@@ -84,8 +105,18 @@ def login():
 
 @bp_main.route('/logout', methods=['GET', 'POST'])
 def logout():
-    flask.flash('You have been logged out.', category='success')
-    return flask.redirect(flask.url_for('.home'))
+    if current_user.is_active:
+        # flask.session.pop('username', None)
+        logout_user()
+
+        identity_changed.send(
+            flask.current_app._get_current_object(),
+            identity=AnonymousIdentity()
+        )
+
+        flask.flash('You have been logged out.', category='success')
+
+    return flask.redirect(flask.url_for('blog.home'))
 
 
 @bp_main.route('/register', methods=['GET', 'POST'])

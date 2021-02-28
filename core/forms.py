@@ -26,6 +26,7 @@ class CommentForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', [DataRequired(), Length(max=255)])
     password = PasswordField('Password', [DataRequired()])
+    remember = BooleanField('Remember Me')
 
     def validate(self):
 
@@ -75,4 +76,5 @@ class RegisterForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', [DataRequired(), Length(max=255)])
-    text = TextAreaField('Content', [DataRequired()])
+    # text = TextAreaField('Content', [DataRequired()])
+    text = TextAreaField('Content') # no DataRequired() or CKEditor breaks

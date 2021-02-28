@@ -3,7 +3,7 @@
 {% block body %}
   <div class="col-lg-12 shadow p-3 mb-2 bg-body rounded" style="margin-top: 75px;">
     <h3>{{ post.title }}</h3>
-    {{ post.text }}
+    {{ post.text | safe }}
   </div>
   <div class="row" style="margin-top: 25px;">
     <div class="col-lg-6">
@@ -20,11 +20,13 @@
       </p>
     </div>
   </div>
-  <div class="row" style="margin-top: 15px;">
-    <div class="col-lg-2">
-      <a href="{{ url_for('.edit_post', id=post.id) }}" class="btn btn-primary">Edit post</a>
+  {% if current_user == post.user %}
+    <div class="row" style="margin-top: 15px;">
+      <div class="col-lg-2">
+        <a href="{{ url_for('.edit_post', id=post.id) }}" class="btn btn-primary">Edit post</a>
+      </div>
     </div>
-  </div:>
+  {% endif %}
   <div class="col-lg-12 shadow p-3 mb-5 bg-body rounded" style="margin-top: 50px;">
     <h4>New comment:</h4>
     {{ render_form('.post', 'Add comment', post_id=post.id) }}

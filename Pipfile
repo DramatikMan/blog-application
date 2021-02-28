@@ -11,6 +11,8 @@ flask-migrate = "*"
 flask-wtf = "*"
 flask-bcrypt = "*"
 flask-openid = "*"
+flask-login = "*"
+flask-principal = "*"
 
 [dev-packages]
 

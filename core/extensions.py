@@ -3,17 +3,36 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 # from flask_oauth import OAuth
+from flask_login import LoginManager
+from flask_principal import Principal, Permission, RoleNeed
 
 
 migrate = Migrate()
 bcrypt = Bcrypt()
 oid = OpenID()
 # oauth = OAuth()
+login_manager = LoginManager()
+principals = Principal()
+
+login_manager.login_view = 'main.login'
+login_manager.session_protection = 'strong'
+login_manager.login_message = 'Please log in to access this page.'
+login_manager.login_mesage_category = 'info'
+
+admin_permission = Permission(RoleNeed('admin'))
+poster_permission = Permission(RoleNeed('poster'))
+default_permission = Permission(RoleNeed('default'))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    from core.models import User
+    return User.query.get(user_id)
 
 
 @oid.after_login
 def create_or_login(resp):
-    from models import db, User
+    from core.models import db, User
     username = resp.fullname or resp.nickname or resp.email
     if not username:
         flask.flash('Invalid login. Please try again.', 'danger')
