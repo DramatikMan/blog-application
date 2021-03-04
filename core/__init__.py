@@ -4,11 +4,19 @@ import flask
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 
-from core.extensions import migrate, bcrypt, oid, login_manager, principals
-from core.models import db, tags, roles, User, Post, Comment, Tag, Role
-from core.commands import cmd
-from core.controllers.main import bp_main
-from core.controllers.blog import bp_blog
+from .extensions import migrate
+from .extensions import bcrypt
+from .extensions import oid
+from .extensions import login_manager
+from .extensions import principals
+from .extensions import rest_api
+
+from .models import db, tags, roles, User, Post, Comment, Tag, Role
+
+from .commands import cmd
+from .controllers.main import bp_main
+from .controllers.blog import bp_blog
+from .controllers.rest.post import PostApi
 
 
 def create_app():
@@ -22,12 +30,18 @@ def create_app():
     app.config.from_object('config.' + cfg)
     app.url_map.strict_slashes = False
 
+    # database resources
     db.init_app(app)
+
+    # extensions
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     oid.init_app(app)
     login_manager.init_app(app)
     principals.init_app(app)
+    # REST extension
+    rest_api.add_resource(PostApi, '/api/post')
+    rest_api.init_app(app)
 
     # flask CLI utility
     app.register_blueprint(cmd)

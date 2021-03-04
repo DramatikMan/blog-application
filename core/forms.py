@@ -5,7 +5,7 @@ from wtforms import PasswordField
 from wtforms import BooleanField
 from wtforms.validators import DataRequired, Length, EqualTo, URL
 
-from core.models import User
+from .models import User
 
 
 class OpenIDForm(FlaskForm):

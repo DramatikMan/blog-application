@@ -3,3 +3,4 @@
 *.pyc
 fill_database.py
 **/sandbox.py
+core/models_mdb.py

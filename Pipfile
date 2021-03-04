@@ -13,6 +13,8 @@ flask-bcrypt = "*"
 flask-openid = "*"
 flask-login = "*"
 flask-principal = "*"
+flask-mongoengine = "*"
+flask-restful = "*"
 
 [dev-packages]
 
