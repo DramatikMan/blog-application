@@ -3,6 +3,7 @@ import os
 import flask
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
+from sqlalchemy import event
 
 from .extensions import migrate
 from .extensions import bcrypt
@@ -10,13 +11,16 @@ from .extensions import oid
 from .extensions import login_manager
 from .extensions import principals
 from .extensions import rest_api
+from .extensions import make_celery
 
-from .models import db, tags, roles, User, Post, Comment, Tag, Role
+from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
 
 from .commands import cmd
 from .controllers.main import bp_main
 from .controllers.blog import bp_blog
 from .controllers.rest.post import PostApi
+
+from .tasks import on_reminder_save
 
 
 def create_app():
@@ -32,6 +36,7 @@ def create_app():
 
     # database resources
     db.init_app(app)
+    event.listen(Reminder, 'after_insert', on_reminder_save)
 
     # extensions
     migrate.init_app(app, db)
@@ -39,9 +44,8 @@ def create_app():
     oid.init_app(app)
     login_manager.init_app(app)
     principals.init_app(app)
-    # REST extension
-    rest_api.add_resource(PostApi, '/api/post')
     rest_api.init_app(app)
+    celery = make_celery(app)
 
     # flask CLI utility
     app.register_blueprint(cmd)

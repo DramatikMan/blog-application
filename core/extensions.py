@@ -6,6 +6,7 @@ from flask_openid import OpenID
 from flask_login import LoginManager
 from flask_principal import Principal, Permission, RoleNeed
 from flask_restful import Api
+from celery import Celery
 
 
 migrate = Migrate()
@@ -28,13 +29,13 @@ default_permission = Permission(RoleNeed('default'))
 
 @login_manager.user_loader
 def load_user(user_id):
-    from core.models import User
+    from .models import User
     return User.query.get(user_id)
 
 
 @oid.after_login
 def create_or_login(resp):
-    from core.models import db, User
+    from .models import db, User
     username = resp.fullname or resp.nickname or resp.email
     if not username:
         flask.flash('Invalid login. Please try again.', 'danger')
@@ -49,14 +50,30 @@ def create_or_login(resp):
     return flask.redirect(flask.url_for('blog.home'))
 
 
+def make_celery(app):
+    celery = Celery(
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
 # facebook = oauth.remote_app(
 #     'facebook',
 #     base_url='https://graph.facebook.com',
 #     request_token_url=None,
 #     access_token_url='/oauth/access_token',
 #     authorize_url='https://www.facebook.com/dialog/oauth',
-#     consumer_key='2483573918454846',
-#     consumer_secret='b8734f6bc4a4bc359ef5ee13f8f1476a',
+#     consumer_key='',
+#     consumer_secret='',
 #     request_token_params={'scope': 'email'}
 # )
 #

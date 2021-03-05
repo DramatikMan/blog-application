@@ -13,8 +13,9 @@ flask-bcrypt = "*"
 flask-openid = "*"
 flask-login = "*"
 flask-principal = "*"
-flask-mongoengine = "*"
 flask-restful = "*"
+flower = "<=0.9.5"
+celery = "<=4.4.6"
 
 [dev-packages]
 
