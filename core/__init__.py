@@ -23,13 +23,14 @@ from .controllers.rest.post import PostApi
 from .tasks import on_reminder_save
 
 
+if os.environ.get('FLASK_ENV') == 'development':
+        cfg = 'DevConfig'
+elif os.environ.get('FLASK_ENV') == 'testing':
+        cfg = 'TestConfig'
+
+
 def create_app():
     app = flask.Flask(__name__)
-
-    if os.environ.get('FLASK_ENV') == 'production':
-        cfg = 'ProdConfig'
-    elif os.environ.get('FLASK_ENV') == 'development':
-        cfg = 'DevConfig'
 
     app.config.from_object('config.' + cfg)
     app.url_map.strict_slashes = False

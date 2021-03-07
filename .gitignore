@@ -1,4 +1,6 @@
 .venv/
+migrations/
+tests/
 **/__pycache__/
 *.pyc
 fill_database.py

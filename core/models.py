@@ -1,4 +1,7 @@
+import os
+
 import flask
+from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import AnonymousUserMixin
 
@@ -9,7 +12,12 @@ from itsdangerous import SignatureExpired
 from .extensions import bcrypt
 
 
-db = SQLAlchemy()
+if os.environ['FLASK_ENV'] == 'development':
+    schema = 'public'
+elif os.environ['FLASK_ENV'] == 'testing':
+    schema = 'test'
+
+db = SQLAlchemy(metadata=MetaData(schema=schema))
 
 
 tags = db.Table('post_x_tags',
