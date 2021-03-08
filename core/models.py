@@ -12,10 +12,10 @@ from itsdangerous import SignatureExpired
 from .extensions import bcrypt
 
 
-if os.environ['FLASK_ENV'] == 'development':
-    schema = 'public'
-elif os.environ['FLASK_ENV'] == 'testing':
+if os.environ['FLASK_ENV'] == 'testing':
     schema = 'test'
+else:
+    schema = 'public'
 
 db = SQLAlchemy(metadata=MetaData(schema=schema))
 

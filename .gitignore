@@ -1,6 +1,7 @@
 .venv/
 migrations/
 tests/
+wsgi_scripts/
 **/__pycache__/
 *.pyc
 fill_database.py

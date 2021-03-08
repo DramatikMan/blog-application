@@ -22,8 +22,9 @@ from .controllers.rest.post import PostApi
 
 from .tasks import on_reminder_save
 
-
-if os.environ.get('FLASK_ENV') == 'development':
+if os.environ.get('FLASK_ENV') == 'production':
+        cfg = 'ProdConfig'
+elif os.environ.get('FLASK_ENV') == 'development':
         cfg = 'DevConfig'
 elif os.environ.get('FLASK_ENV') == 'testing':
         cfg = 'TestConfig'

@@ -16,6 +16,7 @@ flask-principal = "*"
 flask-restful = "*"
 flower = "<=0.9.5"
 celery = "<=4.4.6"
+mod-wsgi = "*"
 
 [dev-packages]
 
