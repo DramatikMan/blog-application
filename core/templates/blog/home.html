@@ -30,7 +30,7 @@
         <ul class="ms-3">
           {% for tag in top_tags %}
             <li>
-              <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}</a>
+              <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}&nbsp;({{ tag[1] }})</a>
             </li>
           {% endfor %}
         </ul>

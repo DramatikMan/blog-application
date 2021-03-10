@@ -11,14 +11,13 @@
       <a class="fw-bold text-decoration-none" href="{{ url_for('.user', username=post.user.username) }}">
         {{ post.user.username }}
       </a>
-      on {{ post.publish_dt }}
+      on {{ post.publish_dt | datetimeformat }}
     </p>
     <p>
       Tags:
       {% for tag in post.tags %}
-        <a href="{{ url_for('.tag', tag_name=tag.title) }}">{{ tag.title }}</a>
-        {% if loop.last %}
-        {% else %}, {% endif %}
+        <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag.title) }}">{{ tag.title }}</a>
+        {%- if not loop.last %},{% endif %}
       {% endfor %}
     </p>
   </div>
@@ -29,13 +28,13 @@
       </a>
     </div>
   {% endif %}
-  <div class="row p-2 shadow rounded mb-3">
+  <div class="row p-2 shadow rounded mb-4">
     <h4>New comment:</h4>
     {{ render_form('.post', 'Add comment', post_id=post.id) }}
   </div>
   {% for comment in comments.items %}
     <div class="row shadow-none p-3 mb-3 bg-light rounded">
-      <p>By: {{ comment.name }} on {{ comment.dt }}</p>
+      <p>By: {{ comment.name }} on {{ comment.dt | datetimeformat }}</p>
       <p>{{ comment.text | truncate(255) | safe }}</p>
     </div>
   {% endfor %}

@@ -13,6 +13,8 @@ from .extensions import principals
 from .extensions import rest_api
 from .extensions import make_celery
 
+from .extensions import datetimeformat
+
 from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
 
 from .commands import cmd
@@ -39,6 +41,9 @@ def create_app():
     '''database resources'''
     db.init_app(app)
     event.listen(Reminder, 'after_insert', on_reminder_save)
+
+    '''jinja custom filters'''
+    app.jinja_env.filters['datetimeformat'] = datetimeformat
 
     '''extensions'''
     # migrate.init_app(app, db)

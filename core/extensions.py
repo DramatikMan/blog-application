@@ -1,3 +1,4 @@
+import datetime
 from functools import wraps
 
 import flask
@@ -27,6 +28,10 @@ login_manager.login_message_category = 'info'
 admin_permission = Permission(RoleNeed('admin'))
 poster_permission = Permission(RoleNeed('poster'))
 default_permission = Permission(RoleNeed('default'))
+
+
+def datetimeformat(value, format='%d-%m-%Y %H:%M'):
+    return value.strftime(format)
 
 
 def login_required(func):

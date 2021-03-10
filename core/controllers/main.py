@@ -103,7 +103,7 @@ def register():
 
 
 @bp_main.route('/current_user', methods=['GET'])
-# @admin_permission.require(http_exception=403)
+@admin_permission.require(http_exception=403)
 def who_is_current_user():
     cu_dict = {}
     for item in dir(current_user):
@@ -112,7 +112,7 @@ def who_is_current_user():
 
 
 @bp_main.route('/flask_session', methods=['GET'])
-# @admin_permission.require(http_exception=403)
+@admin_permission.require(http_exception=403)
 def flask_session_info():
     fs_dict = {}
     for item in dir(flask.session):

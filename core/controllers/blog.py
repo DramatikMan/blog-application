@@ -10,6 +10,7 @@ from ..forms import CommentForm, PostForm
 from ..extensions import poster_permission, admin_permission
 from ..extensions import login_required
 
+
 bp_blog = flask.Blueprint(
     'blog',
     __name__,
