@@ -1,14 +1,14 @@
 import datetime
 
 import flask
-from flask_login import login_required, current_user
+from flask_login import current_user
 from flask_principal import Permission, UserNeed
 from sqlalchemy import text, func
 
-from core.models import db, tags, User, Post, Comment, Tag
-from core.forms import CommentForm, PostForm
-from core.extensions import poster_permission, admin_permission
-
+from ..models import db, tags, User, Post, Comment, Tag
+from ..forms import CommentForm, PostForm
+from ..extensions import poster_permission, admin_permission
+from ..extensions import login_required
 
 bp_blog = flask.Blueprint(
     'blog',
@@ -29,16 +29,6 @@ def sidebar_data():
     ).group_by(Tag).order_by(text('total DESC')).limit(5).all()
 
     return recent, top_tags
-
-
-# @bp_blog.before_request
-# def check_user():
-#     if 'username' in flask.session:
-#         g.current_user = User.query.filter_by(
-#             username=flask.session['username']
-#         ).one()
-#     else:
-#         g.current_user = None
 
 
 @bp_blog.route('/new', methods=['GET', 'POST'])
@@ -167,3 +157,13 @@ def user(username, page=1):
         recent=recent,
         top_tags=top_tags
     )
+
+
+# @bp_blog.before_request
+# def check_user():
+#     if 'username' in flask.session:
+#         g.current_user = User.query.filter_by(
+#             username=flask.session['username']
+#         ).one()
+#     else:
+#         g.current_user = None

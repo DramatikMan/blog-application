@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Create new post{% endblock %}
+{% block title %}Create a new post{% endblock %}
 {% block body %}
   <div class="row shadow p-3 mb-2 bg-body rounded">
     <h1 class="text-center">Create a new post</h1>
@@ -23,7 +23,7 @@
           {% endif %}
           {{ form.text(id='editor', class_='form-control') }}
         </div>
-      <input class="btn btn-primary" type="submit" value="Submit" style="margin-top: 15px;">
+      <input class="btn btn-primary" type="submit" value="Submit">
     </form>
   </div>
 {% endblock %}

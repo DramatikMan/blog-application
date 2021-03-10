@@ -29,19 +29,18 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
 
     def validate(self):
-
-        # check if validators pass
+        '''check if validators pass'''
         check_validate = super().validate()
         if not check_validate:
             return False
 
-        # check if a user exists
+        '''check if a user exists'''
         user = User.query.filter_by(username=self.username.data).first()
         if not user:
             self.username.errors.append('Invalid username or password')
             return False
 
-        # check if passwords match
+        '''check if passwords match'''
         if not user.check_password(self.password.data):
             self.username.errors.append('Invalid username or password')
             return False
@@ -59,13 +58,12 @@ class RegisterForm(FlaskForm):
     recaptcha = RecaptchaField()
 
     def validate(self):
-
-        # check if validators pass
+        '''check if validators pass'''
         check_validate = super().validate()
         if not check_validate:
             return False
 
-        # check if username is taken
+        '''check if username is taken'''
         user = User.query.filter_by(username=self.username.data).first()
         if user:
             self.username.errors.append('User with that name already exists.')
@@ -76,5 +74,4 @@ class RegisterForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', [DataRequired(), Length(max=255)])
-    # text = TextAreaField('Content', [DataRequired()])
-    text = TextAreaField('Content') # no DataRequired() or CKEditor breaks
+    text = TextAreaField('Content')

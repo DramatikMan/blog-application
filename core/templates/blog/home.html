@@ -1,38 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-  <div class="row">
-    <div class="col-lg-9"  style="margin-top: 35px;">
+  <div class="row gx-5">
+    <div class="col-9">
       {% for post in posts.items %}
-      <div class="row shadow p-3 mb-2 bg-body rounded">
-        <div class="col-lg-12">
-          <h4>{{ post.title }}</h4>
+        <div class="row p-2 shadow bg-body rounded mb-2">
+            <h4>{{ post.title }}</h4>
+            <span>
+              {{ post.text | truncate(255) | safe }}
+              <a href="{{ url_for('.post', post_id=post.id) }}">...more</a>
+            </span>
         </div>
-        <div class="col-lg-12">
-          {{ post.text | truncate(255) | safe }}
-          <a href="{{ url_for('.post', post_id=post.id) }}">...more</a>
-        </div>
-      </div>
       {% endfor %}
       {{ render_pagination(posts, '.home') }}
-      <div class="col-lg-3">
-        <div class="row shadow p-3 mb-5 bg-body rounded" style="margin-top: 50px;">
-          <h5>Recent Posts</h5>
-          <ul style="margin-left: 25px;">
-            {% for post in recent %}
+    </div>
+    <div class="col-3">
+      <div class="row p-2 bg-body rounded shadow mb-2 ps-3">
+        <h4>Recent Posts</h4>
+        <ul class="ms-3">
+          {% for post in recent %}
             <li>
-              <a href="{{ url_for('.post', post_id=post.id) }}">{{ post.title }}</a>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="row shadow p-3 mb-5 bg-body rounded">
-          <h5>Popular Tags</h5>
-          <ul style="margin-left: 25px;">
-            {% for tag in top_tags %}
-            <li><a href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
+              <a class="text-decoration-none" href="{{ url_for('.post', post_id=post.id) }}">{{ post.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="row p-2 bg-body rounded shadow mb-2 ps-3">
+        <h4>Popular Tags</h4>
+        <ul class="ms-3">
+          {% for tag in top_tags %}
+            <li>
+              <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </div>

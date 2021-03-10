@@ -22,13 +22,15 @@ db = SQLAlchemy(metadata=MetaData(schema=schema))
 
 tags = db.Table('post_x_tags',
     db.Column('post_id', db.Integer(), db.ForeignKey('post.id')),
-    db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id'))
+    db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id')),
+    db.UniqueConstraint('post_id', 'tag_id')
 )
 
 
 roles = db.Table('user_x_role',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
+    db.UniqueConstraint('user_id', 'role_id')
 )
 
 
@@ -51,7 +53,8 @@ class User(db.Model):
         self.username = username
         self.password = password
         default = Role.query.filter_by(name='default').one()
-        self.roles.append(default)
+        poster = Role.query.filter_by(name='poster').one()
+        self.roles = [default, poster]
 
     def __repr__(self):
         return f"<User '{self.username}'>"

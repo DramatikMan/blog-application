@@ -1,37 +1,38 @@
 {% extends 'base.html' %}
-{% block title %}Post{% endblock %}
+{% block title %}Post: {{ post.title }}{% endblock %}
 {% block body %}
-  <div class="col-lg-12 shadow p-3 mb-2 bg-body rounded" style="margin-top: 75px;">
-    <h3>{{ post.title }}</h3>
-    {{ post.text | safe }}
+  <div class="row p-2 shadow rounded mb-3">
+    <h4>{{ post.title }}</h4>
+    <span>{{ post.text | truncate(255) | safe }}</span>
   </div>
-  <div class="row" style="margin-top: 25px;">
-    <div class="col-lg-6">
-      <p>
-        Written by <a href="{{ url_for('.user', username=post.user.username) }}">{{ post.user.username }}</a> on {{ post.publish_dt }}
-      </p>
-      <p>
-        Tags:
-        {% for tag in post.tags %}
-          <a href="{{ url_for('.tag', tag_name=tag.title) }}">{{ tag.title }}</a>
-          {% if loop.last %}
-          {% else %}, {% endif %}
-        {% endfor %}
-      </p>
-    </div>
+  <div class="row">
+    <p>
+      Written by
+      <a class="fw-bold text-decoration-none" href="{{ url_for('.user', username=post.user.username) }}">
+        {{ post.user.username }}
+      </a>
+      on {{ post.publish_dt }}
+    </p>
+    <p>
+      Tags:
+      {% for tag in post.tags %}
+        <a href="{{ url_for('.tag', tag_name=tag.title) }}">{{ tag.title }}</a>
+        {% if loop.last %}
+        {% else %}, {% endif %}
+      {% endfor %}
+    </p>
   </div>
   {% if current_user == post.user %}
-    <div class="row" style="margin-top: 15px;">
-      <div class="col-lg-2">
-        <a href="{{ url_for('.edit_post', id=post.id) }}" class="btn btn-primary">Edit post</a>
-      </div>
+    <div class="row-sm mb-3">
+      <a href="{{ url_for('.edit_post', id=post.id) }}" class="btn btn-primary" role="button">
+        Edit post
+      </a>
     </div>
   {% endif %}
-  <div class="col-lg-12 shadow p-3 mb-5 bg-body rounded" style="margin-top: 50px;">
+  <div class="row p-2 shadow rounded mb-3">
     <h4>New comment:</h4>
     {{ render_form('.post', 'Add comment', post_id=post.id) }}
   </div>
-  <div class="col-lg-12">
   {% for comment in comments.items %}
     <div class="row shadow-none p-3 mb-3 bg-light rounded">
       <p>By: {{ comment.name }} on {{ comment.dt }}</p>
@@ -39,5 +40,4 @@
     </div>
   {% endfor %}
   {{ render_pagination(comments, '.post', post_id=post.id) }}
-  </div>
-{% endblock %}
+  {% endblock %}

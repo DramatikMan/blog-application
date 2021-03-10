@@ -1,15 +1,17 @@
+from functools import wraps
+
 import flask
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
 # from flask_oauth import OAuth
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_principal import Principal, Permission, RoleNeed
 from flask_restful import Api
 from celery import Celery
 
 
-migrate = Migrate()
+# migrate = Migrate()
 bcrypt = Bcrypt()
 oid = OpenID()
 # oauth = OAuth()
@@ -20,11 +22,32 @@ rest_api = Api()
 login_manager.login_view = 'main.login'
 login_manager.session_protection = 'strong'
 login_manager.login_message = 'Please log in to access this page.'
-login_manager.login_mesage_category = 'info'
+login_manager.login_message_category = 'info'
 
 admin_permission = Permission(RoleNeed('admin'))
 poster_permission = Permission(RoleNeed('poster'))
 default_permission = Permission(RoleNeed('default'))
+
+
+def login_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        '''
+        This expands the original @login_required decorator logic
+        in order to save the decorated function in the session object.
+        '''
+        flask.session['ldf'] = {
+            'name': func.__name__,
+            'kwargs': kwargs
+        }
+
+        if not current_user.is_authenticated:
+            return flask.current_app.login_manager.unauthorized()
+
+        flask.session.pop('ldf', None)
+        return func(*args, **kwargs)
+
+    return decorated_view
 
 
 @login_manager.user_loader

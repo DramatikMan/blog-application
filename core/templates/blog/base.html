@@ -1,37 +1,67 @@
 {% macro render_pagination(pagination, endpoint) %}
-  <nav style="margin-top: 35px;">
-    <ul class="pagination">
-      <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
-        <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}" aria-label="Previous">
-          <span aria-hidden="true">Previous</span>
-        </a>
-      </li>
-      {% for page in pagination.iter_pages() %}
-        {% if page %}
-          {% if page != pagination.page %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for(endpoint, page=page, **kwargs) }}">
-                {{ page }}
-              </a>
-            </li>
-          {% else %}
-            <li class="page-item active">
-              <a class="page-link" href="">
-                {{ page }}
-              </a>
+  {% if pagination.pages > 1 %}
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for(endpoint, page=1, **kwargs) }}">First</a>
+        </li>
+        <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}">&laquo;</a>
+        </li>
+
+        {% if pagination.page >=3 %}
+          <li class="page-item {% if pagination.page >= 4 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(endpoint, page=1, **kwargs) }}">
+              {% if pagination.page == 3 %}1{% else %}...{% endif %}
+            </a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >=4) and (pagination.page >= pagination.pages - 1) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages - 3, **kwargs) }}">{{ pagination.pages - 3 }}</a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >=5) and (pagination.page == pagination.pages) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages - 2, **kwargs) }}">{{ pagination.pages - 2 }}</a>
+          </li>
+        {% endif %}
+
+        {% for page in pagination.iter_pages(left_edge=0, left_current=1, right_current=2, right_edge=0) %}
+          {% if page %}
+            <li class="page-item {% if page == pagination.page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for(endpoint, page=page, **kwargs) }}">{{ page }}</a>
             </li>
           {% endif %}
-        {% else %}
-          <li class="page-item"><a class="page-link">...</a></li>
+        {% endfor %}
+
+        {% if (pagination.pages >= 3) and (pagination.page == 1) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=3, **kwargs) }}">3</a>
+          </li>
         {% endif %}
-      {% endfor %}
-      <li class="page-item {% if pagination.next().page > pagination.pages %}disabled{% endif %}">
-        <a class="page-link" href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}" aria-label="Next">
-          <span aria-hidden="true">Next</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+        {% if (pagination.pages >= 4) and (pagination.page <= 2) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=4, **kwargs) }}">4</a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >= 5) and (pagination.page <= pagination.pages - 2) %}
+          <li class="page-item {% if pagination.page < pagination.pages - 2 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages, **kwargs) }}">
+              {% if pagination.page < pagination.pages - 2 %}...{% else %}{{ pagination.pages }}{% endif %}
+            </a>
+          </li>
+        {% endif %}
+
+        <li class="page-item {% if pagination.page == pagination.pages %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}">&raquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages, **kwargs) }}">Last</a>
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
 {% endmacro %}
 
 {% macro render_form(endpoint, button_text) %}
@@ -40,23 +70,30 @@
     {% for attr in form %}
       {% if ( ('CSRF' not in attr.label | string) and ('Remember' not in attr.label | string) ) %}
         <div class="form-group">
-            {{ attr.label }}
-            {% if attr.errors %}
-              {% for e in attr.errors %}
-                <p class="help-block">{{ e }}</p>
-              {% endfor %}
-            {% endif %}
+          {% if attr.errors %}
+            {% for e in attr.errors %}
+              <p class="form-text">{{ e }}</p>
+            {% endfor %}
+          {% endif %}
+          {{ attr.label }}
+          {% if not ('edit' in endpoint) %}
             {{ attr(class_='form-control') }}
+          {% else %}
+            {{ attr(id='editor', class_='form-control') }}
+          {% endif %}
         </div>
       {% endif %}
       {% if 'Remember' in attr.label | string %}
-        <div class="form-check" style="margin-top: 10px;">
+        <div class="form-check">
           <input type="checkbox" class="form-check-input" id="RememberMe">
-          <label class="form-check-label" for="RememberMe">Remember Me</label>
+          <label class="form-check-label" form="RememberMe">Remember Me</label>
         </div>
       {% endif %}
     {% endfor %}
-    <input class="btn btn-primary" type="submit" value="{{ button_text }}" style="margin-top: 15px;">
+    <input class="btn btn-primary mt-3" type="submit" value="{{ button_text }}">
+    {% if 'login' in endpoint %}
+      <a class="btn btn-primary mt-3" href="{{ url_for('main.register') }}">Register</a>
+    {% endif %}
   </form>
 {% endmacro %}
 
@@ -64,7 +101,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}" sizes="16x16">
@@ -74,22 +110,40 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/iPhone-6-Plus.png') }}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='icons/iPad-Retina.png') }}">
     <link rel="apple-touch-icon" sizes="167x167" href="{{ url_for('static', filename='icons/iPad-Pro.png') }}">
-    <link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron">
-        <h1><a href="{{ url_for('blog.home') }}">My Blog</a></h1>
-          <p>Welcome to the blog!</p>
+      <div class="row">
+        <h1><a href="{{ url_for('blog.home') }}">Blog App</a></h1>
+        <p class="font-monospace fw-bold">Welcome to the blog!</p>
+      </div>
+      <div class="btn-toolbar mb-3" role="toolbar">
+        <div class="btn-group me-2" role="group">
+          <a href="{{ url_for('blog.home') }}" class="btn btn-outline-primary" role="button">Home</a>
+          <a href="#" class="btn btn-outline-primary disabled" role="button">API</a>
+        </div>
+        <div class="btn-group me-2" role="group">
+          <a href="{{ url_for('blog.new_post') }}" class="btn btn-primary" role="button">Create a new post</a>
+        </div>
+        <div class="btn-group" role="group">
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('blog.user', username=current_user.username) }}" class="btn btn-outline-primary" role="button">Your profile</a>
+          {% endif %}
+          {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary" role="button">Login</a>
+          {% else %}
+            <a href="{{ url_for('main.logout') }}" class="btn btn-outline-primary" role="button">Logout</a>
+          {% endif %}
+        </div>
       </div>
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissable fade show" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            {{ message }}
-          </div>
+            <div class="alert alert-{{ category }} alert-dismissable fade show" role="alert">
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              {{ message }}
+            </div>
           {% endfor %}
         {% endif %}
       {% endwith %}
