@@ -2,7 +2,7 @@ import flask
 from flask_restful import Resource
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-from ...models import User
+from ..models import User
 from .parsers import user_post_parser
 
 

@@ -1,3 +1,4 @@
+import os
 import datetime
 
 import flask
@@ -14,7 +15,7 @@ from ..extensions import login_required
 bp_blog = flask.Blueprint(
     'blog',
     __name__,
-    template_folder=('../templates/blog'),
+    template_folder=os.path.join('templates', 'blog'),
     url_prefix='/blog'
 )
 

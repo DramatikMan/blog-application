@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
-{% block title %}Edit post{% endblock %}
+{% extends 'index.html' %}
+{% block title %}Create a new post{% endblock %}
 {% block body %}
   <div class="row p-2 shadow rounded mb-3">
-    <h1 class="text-center">Edit post</h1>
-    {{ render_form('.edit_post', 'Submit', id=post.id) }}
+    <h1 class="text-center">Create a new post</h1>
+    {{ render_form('.new_post', 'Submit') }}
   </div>
 {% endblock %}
 {% block js %}

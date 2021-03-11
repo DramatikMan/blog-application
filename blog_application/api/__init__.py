@@ -1,4 +1,4 @@
-from ...extensions import rest_api
+from ..extensions import rest_api
 from .post import PostApi
 from .auth import AuthApi
 

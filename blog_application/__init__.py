@@ -10,17 +10,18 @@ from .extensions import bcrypt
 from .extensions import oid
 from .extensions import login_manager
 from .extensions import principals
-from .extensions import rest_api
+# from .extensions import rest_api+
 from .extensions import make_celery
 
 from .extensions import datetimeformat
 
 from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
 
-from .commands import cmd
-from .controllers.main import bp_main
-from .controllers.blog import bp_blog
+from .commands import bp_cmd
+from .blog import bp_blog
+from .main import bp_main
 
+from .api import rest_api
 from .tasks import on_reminder_save
 
 
@@ -54,11 +55,10 @@ def create_app():
     rest_api.init_app(app)
     celery = make_celery(app)
 
-    '''flask CLI utility'''
-    app.register_blueprint(cmd)
     '''module blueprints'''
-    app.register_blueprint(bp_main)
     app.register_blueprint(bp_blog)
+    app.register_blueprint(bp_cmd)
+    app.register_blueprint(bp_main)
 
     '''flask shell utility'''
     @app.shell_context_processor

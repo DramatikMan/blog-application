@@ -3,7 +3,7 @@ import datetime
 import flask
 from flask_restful import Resource, fields, marshal_with
 
-from ...models import db, User, Post, Tag
+from ..models import db, User, Post, Tag
 from .fields import HTMLField
 from .parsers import post_get_parser
 from .parsers import post_post_parser

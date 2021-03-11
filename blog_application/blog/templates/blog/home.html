@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'index.html' %}
 {% block title %}Home{% endblock %}
 {% block body %}
   <div class="row gx-5">
@@ -30,7 +30,8 @@
         <ul class="ms-3">
           {% for tag in top_tags %}
             <li>
-              <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}&nbsp;({{ tag[1] }})</a>
+              <a class="text-decoration-none" href="{{ url_for('.tag', tag_name=tag[0].title) }}">{{ tag[0].title }}</a>
+              <span>({{ tag[1] }})</span>
             </li>
           {% endfor %}
         </ul>

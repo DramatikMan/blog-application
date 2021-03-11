@@ -5,5 +5,5 @@ wsgi_scripts/
 **/__pycache__/
 *.pyc
 **/sandbox.py
-core/models_mdb.py
+**/models_mdb.py
 config.py

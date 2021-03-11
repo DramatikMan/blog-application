@@ -1,3 +1,4 @@
+import os
 import json
 
 import flask
@@ -13,7 +14,7 @@ from ..forms import LoginForm, RegisterForm, OpenIDForm
 bp_main = flask.Blueprint(
     'main',
     __name__,
-    template_folder='../templates/main'
+    template_folder=os.path.join('templates', 'main')
 )
 
 

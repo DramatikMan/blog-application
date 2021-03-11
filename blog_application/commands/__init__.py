@@ -4,20 +4,20 @@ import click
 
 from flask import Blueprint
 
-from .models import db, User, Post, Tag, Role
+from ..models import db, User, Post, Tag, Role
 
 
-cmd = Blueprint('cmd', __name__, cli_group=None)
+bp_cmd = Blueprint('cmd', __name__, cli_group=None)
 
 
-@cmd.cli.command('db_clear')
+@bp_cmd.cli.command('db_clear')
 @click.argument('all')
 def db_drop_all(all):
     '''Drop all tables from the connected database.'''
     db.drop_all()
 
 
-@cmd.cli.command('db_fill')
+@bp_cmd.cli.command('db_fill')
 @click.argument('all')
 def db_fill_all(all):
     '''Create all tables and fill them with example data.'''
