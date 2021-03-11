@@ -1,6 +1,6 @@
 import datetime
 
-import flask
+from flask import abort
 from flask_restful import Resource, fields, marshal_with
 
 from ..models import db, User, Post, Tag
@@ -32,7 +32,7 @@ class PostApi(Resource):
         if post_id:
             post = Post.query.get(post_id)
             if not post:
-                flask.abort(404)
+                abort(404)
 
             return post
         else:
@@ -46,13 +46,13 @@ class PostApi(Resource):
 
     def post(self, post_id=None):
         if post_id:
-            flask.abort(405)
+            abort(405)
         else:
             args = post_post_parser.parse_args(strict=True)
 
             user = User.verify_auth_token(args['token'])
             if not user:
-                flask.abort(401)
+                abort(401)
 
             new_post = Post(args['title'])
             new_post.user = user
@@ -75,16 +75,16 @@ class PostApi(Resource):
 
     def put(self, post_id=None):
         if not post_id:
-            flask.abort(401)
+            abort(401)
 
         post = Post.query.get(post_id)
         if not post:
-            flask.abort(404)
+            abort(404)
 
         args = post_put_parser.parse_args(strict=True)
         user = User.verify_auth_token(args['token'])
         if not user:
-            flask.abort(401)
+            abort(401)
         if user != post.user:
             flask.about(403)
 
@@ -108,16 +108,16 @@ class PostApi(Resource):
 
     def delete(self, post_id=None):
         if not post_id:
-            flask.abort(400)
+            abort(400)
 
         post = Post.query.get(post_id)
         if not post:
-            flask.abort(404)
+            abort(404)
 
         args = post_delete_parser.parse_args(strict=True)
         user = User.verify_auth_token(args['token'])
         if user != post.user:
-            flask.abort(403)
+            abort(403)
 
         db.session.delete(post)
         db.session.commit()

@@ -1,6 +1,6 @@
 import os
 
-import flask
+from flask import current_app
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import AnonymousUserMixin
@@ -85,7 +85,7 @@ class User(db.Model):
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer(flask.current_app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
 
         try:
             data = s.loads(token)

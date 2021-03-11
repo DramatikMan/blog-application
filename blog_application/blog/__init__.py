@@ -1,7 +1,7 @@
 import os
 import datetime
 
-import flask
+from flask import Blueprint, redirect, url_for, render_template, abort
 from flask_login import current_user
 from flask_principal import Permission, UserNeed
 from sqlalchemy import text, func
@@ -12,7 +12,7 @@ from ..extensions import poster_permission, admin_permission
 from ..extensions import login_required
 
 
-bp_blog = flask.Blueprint(
+bp_blog = Blueprint(
     'blog',
     __name__,
     template_folder=os.path.join('templates', 'blog'),
@@ -47,9 +47,9 @@ def new_post():
         db.session.add(new_post)
         db.session.commit()
 
-        return flask.redirect(flask.url_for('.post', post_id=new_post.id))
+        return redirect(url_for('.post', post_id=new_post.id))
 
-    return flask.render_template('new.html', form=form)
+    return render_template('new.html', form=form)
 
 
 @bp_blog.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -58,7 +58,7 @@ def new_post():
 def edit_post(id):
     post = Post.query.get_or_404(id)
     if current_user != post.user:
-        flask.abort(403)
+        abort(403)
 
     permission = Permission(UserNeed(post.user.id))
     if permission.can() or admin_permission.can():
@@ -72,12 +72,12 @@ def edit_post(id):
             db.session.add(post)
             db.session.commit()
 
-            return flask.redirect(flask.url_for('.post', post_id=post.id))
+            return redirect(url_for('.post', post_id=post.id))
 
         form.text.data = post.text
-        return flask.render_template('edit.html', form=form, post=post)
+        return render_template('edit.html', form=form, post=post)
     else:
-        flask.abort(403)
+        abort(403)
 
 
 @bp_blog.route('/')
@@ -88,7 +88,7 @@ def home(page=1):
     ).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return flask.render_template(
+    return render_template(
         'home.html',
         posts=posts,
         recent=recent,
@@ -111,14 +111,14 @@ def post(post_id, page=1):
         db.session.add(new_comment)
         db.session.commit()
 
-        return flask.redirect(str(post_id))
+        return redirect(str(post_id))
 
     post = Post.query.get_or_404(post_id)
     tags = post.tags
     comments = post.comments.order_by(Comment.dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return flask.render_template(
+    return render_template(
         'post.html',
         post=post,
         tags=tags,
@@ -136,7 +136,7 @@ def tag(tag_name, page=1):
     posts = tag.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return flask.render_template(
+    return render_template(
         'tag.html',
         tag=tag,
         posts=posts,
@@ -152,7 +152,7 @@ def user(username, page=1):
     posts = user.posts.order_by(Post.publish_dt.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return flask.render_template(
+    return render_template(
         'user.html',
         user=user,
         posts=posts,
@@ -163,9 +163,9 @@ def user(username, page=1):
 
 # @bp_blog.before_request
 # def check_user():
-#     if 'username' in flask.session:
+#     if 'username' in session:
 #         g.current_user = User.query.filter_by(
-#             username=flask.session['username']
+#             username=session['username']
 #         ).one()
 #     else:
 #         g.current_user = None

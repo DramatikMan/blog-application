@@ -1,6 +1,6 @@
 import os
 
-import flask
+from flask import Flask
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 from sqlalchemy import event
@@ -34,7 +34,7 @@ elif os.environ.get('FLASK_ENV') == 'testing':
 
 
 def create_app():
-    app = flask.Flask(__name__)
+    app = Flask(__name__)
 
     app.config.from_object('config.' + cfg)
     app.url_map.strict_slashes = False

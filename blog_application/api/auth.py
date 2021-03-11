@@ -1,4 +1,4 @@
-import flask
+from flask import current_app, abort
 from flask_restful import Resource
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
@@ -13,10 +13,10 @@ class AuthApi(Resource):
 
         if user.check_password(args['password']):
             s = Serializer(
-                flask.current_app.config['SECRET_KEY'],
+                current_app.config['SECRET_KEY'],
                 expires_in=600
             )
             token = s.dumps({'id': user.id})
             return {'token': token.decode()}
         else:
-            flask.abort(401)
+            abort(401)

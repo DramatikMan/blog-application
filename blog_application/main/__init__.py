@@ -1,7 +1,9 @@
 import os
 import json
 
-import flask
+from flask import Blueprint
+from flask import redirect, url_for, render_template, flash, jsonify
+from flask import current_app, session
 from flask_login import login_user, logout_user, current_user
 from flask_principal import Identity, AnonymousIdentity, identity_changed
 
@@ -11,7 +13,7 @@ from ..extensions import oid, admin_permission
 from ..forms import LoginForm, RegisterForm, OpenIDForm
 
 
-bp_main = flask.Blueprint(
+bp_main = Blueprint(
     'main',
     __name__,
     template_folder=os.path.join('templates', 'main')
@@ -20,7 +22,7 @@ bp_main = flask.Blueprint(
 
 @bp_main.route('/')
 def index():
-    return flask.redirect(flask.url_for('blog.home'))
+    return redirect(url_for('blog.home'))
 
 
 @bp_main.route('/login', methods=['GET', 'POST'])
@@ -41,26 +43,26 @@ def login():
         login_user(user, remember=form.remember.data)
 
         identity_changed.send(
-            flask.current_app._get_current_object(),
+            current_app._get_current_object(),
             identity=Identity(user.id)
         )
 
         kwargs = {}
-        if 'ldf' in flask.session:
-            next_view = flask.session['ldf']['name']
-            kwargs = flask.session['ldf']['kwargs']
-            flask.session.pop('ldf', None)
+        if 'ldf' in session:
+            next_view = session['ldf']['name']
+            kwargs = session['ldf']['kwargs']
+            session.pop('ldf', None)
         else:
             next_view = 'home'
 
-        flask.flash('You have been logged in.', category='success')
-        return flask.redirect(flask.url_for('blog.' + next_view, **kwargs))
+        flash('You have been logged in.', category='success')
+        return redirect(url_for('blog.' + next_view, **kwargs))
 
     openid_errors = oid.fetch_error()
     if openid_errors:
-        flask.flash(openid_errors, category='danger')
+        flash(openid_errors, category='danger')
 
-    return flask.render_template(
+    return render_template(
         'login.html',
         form=form,
         openid_form=openid_form
@@ -73,13 +75,13 @@ def logout():
         logout_user()
 
         identity_changed.send(
-            flask.current_app._get_current_object(),
+            current_app._get_current_object(),
             identity=AnonymousIdentity()
         )
 
-        flask.flash('You have been logged out.', category='success')
+        flash('You have been logged out.', category='success')
 
-    return flask.redirect(flask.url_for('blog.home'))
+    return redirect(url_for('blog.home'))
 
 
 @bp_main.route('/register', methods=['GET', 'POST'])
@@ -93,14 +95,14 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        flask.flash(
+        flash(
             'Your user has been created, please log in.',
             category='success'
         )
 
-        return flask.redirect(flask.url_for('.login'))
+        return redirect(url_for('.login'))
     else:
-        return flask.render_template('register.html', form=form)
+        return render_template('register.html', form=form)
 
 
 @bp_main.route('/current_user', methods=['GET'])
@@ -109,24 +111,24 @@ def who_is_current_user():
     cu_dict = {}
     for item in dir(current_user):
         cu_dict[str(item)] = str(getattr(current_user, str(item)))
-    return flask.jsonify(cu_dict)
+    return jsonify(cu_dict)
 
 
 @bp_main.route('/flask_session', methods=['GET'])
 @admin_permission.require(http_exception=403)
 def flask_session_info():
     fs_dict = {}
-    for item in dir(flask.session):
-        fs_dict[str(item)] = str(getattr(flask.session, str(item)))
-    return flask.jsonify(fs_dict)
+    for item in dir(session):
+        fs_dict[str(item)] = str(getattr(session, str(item)))
+    return jsonify(fs_dict)
 
 
 # @bp_main.route('/facebook')
 # def facebook_login():
 #     return facebook.authorize(
-#         callback=flask.url_for(
+#         callback=url_for(
 #             '.facebook_authorized',
-#             next=flask.request.referrer or None,
+#             next=request.referrer or None,
 #             _external=True
 #         )
 #     )
@@ -135,11 +137,11 @@ def flask_session_info():
 # @bp_main.route('/facebook/authorized')
 # def facebook_authorized(resp):
 #     if resp is None:
-#         reason = flask.request.args['error_reason']
-#         error = flask.request.args['error_description']
+#         reason = request.args['error_reason']
+#         error = request.args['error_description']
 #         return f'Access denied: reason={reason} error={error}'
 #
-#     flask.session['facebook_oauth_token'] = (resp['access_token'], '')
+#     session['facebook_oauth_token'] = (resp['access_token'], '')
 #
 #     me = facebook.get('/me')
 #     fname = me.data['first_name']
@@ -150,8 +152,8 @@ def flask_session_info():
 #         db.session.add(user)
 #         db.session.commt()
 #
-#     flask.flash('You have been logged in', category='success')
+#     flash('You have been logged in', category='success')
 #
-#     return flask.redirect(
-#         flask.request.args.get('next') or flask.url_for('blog_home')
+#     return redirect(
+#         request.args.get('next') or url_for('blog_home')
 #     )

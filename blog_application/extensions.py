@@ -1,7 +1,7 @@
 import datetime
 from functools import wraps
 
-import flask
+from flask import flash, redirect, url_for, session, current_app
 # from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_openid import OpenID
@@ -41,15 +41,15 @@ def login_required(func):
         This expands the original @login_required decorator logic
         in order to save the decorated function in the session object.
         '''
-        flask.session['ldf'] = {
+        session['ldf'] = {
             'name': func.__name__,
             'kwargs': kwargs
         }
 
         if not current_user.is_authenticated:
-            return flask.current_app.login_manager.unauthorized()
+            return current_app.login_manager.unauthorized()
 
-        flask.session.pop('ldf', None)
+        session.pop('ldf', None)
         return func(*args, **kwargs)
 
     return decorated_view
@@ -66,8 +66,8 @@ def create_or_login(resp):
     from .models import db, User
     username = resp.fullname or resp.nickname or resp.email
     if not username:
-        flask.flash('Invalid login. Please try again.', 'danger')
-        return flask.redirect(flask.url_for('main.login'))
+        flash('Invalid login. Please try again.', 'danger')
+        return redirect(url_for('main.login'))
 
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -75,7 +75,7 @@ def create_or_login(resp):
         db.session.add(user)
         db.session.commit()
 
-    return flask.redirect(flask.url_for('blog.home'))
+    return redirect(url_for('blog.home'))
 
 
 def make_celery(app):
@@ -107,4 +107,4 @@ def make_celery(app):
 #
 # @facebook.tokengetter
 # def get_facebook_auth_token():
-#     return flask.session.get('facebook_oauth_token')
+#     return session.get('facebook_oauth_token')
