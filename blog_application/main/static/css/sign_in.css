@@ -1,0 +1,12 @@
+.button-google {
+  background: url('../assets/btn_google_signin_dark_normal_web.png') no-repeat;
+  cursor:pointer;
+  border:none;
+  width:191px;
+  height:46px;
+  transition: 0.3s;
+}
+
+.button-google:hover {background: url('../assets/btn_google_signin_dark_focus_web.png') no-repeat;}
+
+.button-google:active {background: url('../assets/btn_google_signin_dark_pressed_web.png') no-repeat;}

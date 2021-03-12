@@ -28,7 +28,7 @@ def db_fill_all(all):
     role_3 = Role('default')
     db.session.bulk_save_objects([role_1, role_2, role_3])
 
-    user = User(username='DramatikMan')
+    user = User(username='DramatikMan', email='dramatikman@gmail.com')
     user.set_password('SilenceAndSleep')
     admin = Role.query.filter_by(name='admin').one()
     user.roles.append(admin)

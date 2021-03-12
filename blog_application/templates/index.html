@@ -93,6 +93,11 @@
     <input class="btn btn-primary mt-3" type="submit" value="{{ button_text }}">
     {% if 'login' in endpoint %}
       <a class="btn btn-primary mt-3" href="{{ url_for('main.register') }}">Sign up</a>
+      <div class="row-sm mt-3">
+        <a href="{{ url_for('google.login') }}">
+          <div class="button-google"></div>
+        </a>
+      </div>
     {% endif %}
   </form>
 {% endmacro %}
@@ -102,6 +107,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}" sizes="16x16">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}" sizes="32x32">
@@ -111,6 +117,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='icons/iPad-Retina.png') }}">
     <link rel="apple-touch-icon" sizes="167x167" href="{{ url_for('static', filename='icons/iPad-Pro.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    {% block link %}{% endblock %}
   </head>
   <body>
     <div class="container">

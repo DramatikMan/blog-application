@@ -15,8 +15,7 @@ from ..extensions import login_required
 bp_blog = Blueprint(
     'blog',
     __name__,
-    template_folder=os.path.join('templates', 'blog'),
-    url_prefix='/blog'
+    template_folder='templates/blog'
 )
 
 
@@ -159,13 +158,3 @@ def user(username, page=1):
         recent=recent,
         top_tags=top_tags
     )
-
-
-# @bp_blog.before_request
-# def check_user():
-#     if 'username' in session:
-#         g.current_user = User.query.filter_by(
-#             username=session['username']
-#         ).one()
-#     else:
-#         g.current_user = None

@@ -5,12 +5,10 @@ from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 from sqlalchemy import event
 
-# from .extensions import migrate
+from .extensions import migrate
 from .extensions import bcrypt
-from .extensions import oid
 from .extensions import login_manager
 from .extensions import principals
-# from .extensions import rest_api+
 from .extensions import make_celery
 
 from .extensions import datetimeformat
@@ -20,17 +18,14 @@ from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
 from .commands import bp_cmd
 from .blog import bp_blog
 from .main import bp_main
+from .oauth.google import bp_google
 
 from .api import rest_api
 from .tasks import on_reminder_save
 
 
-if os.environ.get('FLASK_ENV') == 'production':
-        cfg = 'ProdConfig'
-elif os.environ.get('FLASK_ENV') == 'development':
-        cfg = 'DevConfig'
-elif os.environ.get('FLASK_ENV') == 'testing':
-        cfg = 'TestConfig'
+flask_env = os.environ.get('FLASK_ENV')
+cfg = flask_env[:4].capitalize() + 'Config'
 
 
 def create_app():
@@ -39,28 +34,23 @@ def create_app():
     app.config.from_object('config.' + cfg)
     app.url_map.strict_slashes = False
 
-    '''database resources'''
     db.init_app(app)
     event.listen(Reminder, 'after_insert', on_reminder_save)
 
-    '''jinja custom filters'''
     app.jinja_env.filters['datetimeformat'] = datetimeformat
 
-    '''extensions'''
-    # migrate.init_app(app, db)
+    migrate.init_app(app, db)
     bcrypt.init_app(app)
-    oid.init_app(app)
     login_manager.init_app(app)
     principals.init_app(app)
     rest_api.init_app(app)
     celery = make_celery(app)
 
-    '''module blueprints'''
-    app.register_blueprint(bp_blog)
     app.register_blueprint(bp_cmd)
+    app.register_blueprint(bp_blog, url_prefix='/blog')
     app.register_blueprint(bp_main)
+    app.register_blueprint(bp_google)
 
-    '''flask shell utility'''
     @app.shell_context_processor
     def make_shell_context():
         return dict(

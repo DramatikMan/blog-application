@@ -10,13 +10,13 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-wtf = "*"
 flask-bcrypt = "*"
-flask-openid = "*"
 flask-login = "*"
 flask-principal = "*"
 flask-restful = "*"
 flower = "<=0.9.5"
 celery = "<=4.4.6"
-mod-wsgi = "*"
+flask-dance = "*"
+sqlalchemy-utils = "*"
 
 [dev-packages]
 

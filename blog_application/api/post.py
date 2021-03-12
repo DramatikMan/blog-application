@@ -50,28 +50,28 @@ class PostApi(Resource):
         else:
             args = post_post_parser.parse_args(strict=True)
 
-            user = User.verify_auth_token(args['token'])
-            if not user:
-                abort(401)
+        user = User.verify_auth_token(args['token'])
+        if not user:
+            abort(401)
 
-            new_post = Post(args['title'])
-            new_post.user = user
-            new_post.publish_dt = datetime.datetime.now()
-            new_post.text = args['text']
+        new_post = Post(args['title'])
+        new_post.user = user
+        new_post.publish_dt = datetime.datetime.now()
+        new_post.text = args['text']
 
-            if args['tags']:
-                for item in args['tags']:
-                    tag = Tag.query.filter_by(title=item).first()
-                    if tag:
-                        new_post.tags.append(tag)
-                    else:
-                        new_tag = Tag(item)
-                        new_post.tags.append(new_tag)
+        if args['tags']:
+            for item in args['tags']:
+                tag = Tag.query.filter_by(title=item).first()
+                if tag:
+                    new_post.tags.append(tag)
+                else:
+                    new_tag = Tag(item)
+                    new_post.tags.append(new_tag)
 
-                db.session.add(new_post)
-                db.session.commit()
+            db.session.add(new_post)
+            db.session.commit()
 
-            return new_post.id, 201
+        return new_post.id, 201
 
     def put(self, post_id=None):
         if not post_id:

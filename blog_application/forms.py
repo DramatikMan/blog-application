@@ -8,10 +8,6 @@ from wtforms.validators import DataRequired, Length, EqualTo, URL
 from .models import User
 
 
-class OpenIDForm(FlaskForm):
-    openid = StringField('OpenID URL', [DataRequired(), URL()])
-
-
 class CommentForm(FlaskForm):
     name = StringField(
         'Name',
@@ -29,18 +25,15 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
 
     def validate(self):
-        '''check if validators pass'''
         check_validate = super().validate()
         if not check_validate:
             return False
 
-        '''check if a user exists'''
         user = User.query.filter_by(username=self.username.data).first()
         if not user:
             self.username.errors.append('Invalid username or password')
             return False
 
-        '''check if passwords match'''
         if not user.check_password(self.password.data):
             self.username.errors.append('Invalid username or password')
             return False
@@ -58,12 +51,10 @@ class RegisterForm(FlaskForm):
     recaptcha = RecaptchaField()
 
     def validate(self):
-        '''check if validators pass'''
         check_validate = super().validate()
         if not check_validate:
             return False
 
-        '''check if username is taken'''
         user = User.query.filter_by(username=self.username.data).first()
         if user:
             self.username.errors.append('User with that name already exists.')

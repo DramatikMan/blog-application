@@ -8,15 +8,16 @@ from flask_login import login_user, logout_user, current_user
 from flask_principal import Identity, AnonymousIdentity, identity_changed
 
 from ..models import db, User
-from ..extensions import oid, admin_permission
-# from ..extensions import facebook
-from ..forms import LoginForm, RegisterForm, OpenIDForm
+from ..extensions import admin_permission
+from ..forms import LoginForm, RegisterForm
 
 
 bp_main = Blueprint(
     'main',
     __name__,
-    template_folder=os.path.join('templates', 'main')
+    static_folder='static',
+    static_url_path='/main/static',
+    template_folder='templates/main'
 )
 
 
@@ -26,17 +27,11 @@ def index():
 
 
 @bp_main.route('/login', methods=['GET', 'POST'])
-@oid.loginhandler
 def login():
-    form = LoginForm()
-    openid_form = OpenIDForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('blog.home'))
 
-    if openid_form.validate_on_submit():
-        return oid.try_login(
-            openid_form.openid.data,
-            ask_for=['nickname', 'email'],
-            ask_for_optional=['fullname']
-        )
+    form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).one()
@@ -58,15 +53,7 @@ def login():
         flash('You have been logged in.', category='success')
         return redirect(url_for('blog.' + next_view, **kwargs))
 
-    openid_errors = oid.fetch_error()
-    if openid_errors:
-        flash(openid_errors, category='danger')
-
-    return render_template(
-        'login.html',
-        form=form,
-        openid_form=openid_form
-    )
+    return render_template('login.html', form=form)
 
 
 @bp_main.route('/logout', methods=['GET', 'POST'])
@@ -86,6 +73,9 @@ def logout():
 
 @bp_main.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('blog.home'))
+
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -121,39 +111,3 @@ def flask_session_info():
     for item in dir(session):
         fs_dict[str(item)] = str(getattr(session, str(item)))
     return jsonify(fs_dict)
-
-
-# @bp_main.route('/facebook')
-# def facebook_login():
-#     return facebook.authorize(
-#         callback=url_for(
-#             '.facebook_authorized',
-#             next=request.referrer or None,
-#             _external=True
-#         )
-#     )
-#
-#
-# @bp_main.route('/facebook/authorized')
-# def facebook_authorized(resp):
-#     if resp is None:
-#         reason = request.args['error_reason']
-#         error = request.args['error_description']
-#         return f'Access denied: reason={reason} error={error}'
-#
-#     session['facebook_oauth_token'] = (resp['access_token'], '')
-#
-#     me = facebook.get('/me')
-#     fname = me.data['first_name']
-#     lname = me.data['last_name']
-#     user = User.query.filter_by(username=fname + ' ' + lname).first()
-#     if not user:
-#         user = User(fname + ' ' + lname)
-#         db.session.add(user)
-#         db.session.commt()
-#
-#     flash('You have been logged in', category='success')
-#
-#     return redirect(
-#         request.args.get('next') or url_for('blog_home')
-#     )
