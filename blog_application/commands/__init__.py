@@ -2,7 +2,7 @@ import random
 import datetime
 import click
 
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 from ..models import db, User, Post, Tag, Role
 
@@ -28,8 +28,12 @@ def db_fill_all(all):
     role_3 = Role('default')
     db.session.bulk_save_objects([role_1, role_2, role_3])
 
-    user = User(username='DramatikMan', email='dramatikman@gmail.com')
-    user.set_password('SilenceAndSleep')
+
+    user = User(
+        username=current_app.config['ADMIN_NAME'],
+        email=current_app.config['ADMIN_EMAIL']
+    )
+    user.set_password(current_app.config['ADMIN_PASSWORD'])
     admin = Role.query.filter_by(name='admin').one()
     user.roles.append(admin)
     db.session.add(user)
