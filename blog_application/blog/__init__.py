@@ -2,14 +2,13 @@ import os
 import datetime
 
 from flask import Blueprint, redirect, url_for, render_template, abort
-from flask_login import current_user
+from flask_login import current_user, login_required
 from flask_principal import Permission, UserNeed
 from sqlalchemy import text, func
 
 from ..models import db, tags, User, Post, Comment, Tag
 from ..forms import CommentForm, PostForm
 from ..extensions import poster_permission, admin_permission
-from ..extensions import login_required
 
 
 bp_blog = Blueprint(

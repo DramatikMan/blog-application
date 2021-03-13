@@ -1,7 +1,8 @@
 import datetime
 from functools import wraps
+from urllib.parse import urlparse, urljoin
 
-from flask import flash, redirect, url_for, session, current_app
+from flask import flash, redirect, url_for, session, current_app, request
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
@@ -30,25 +31,11 @@ def datetimeformat(value, format='%d-%m-%Y %H:%M'):
     return value.strftime(format)
 
 
-def login_required(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        '''
-        This expands the original @login_required decorator logic
-        in order to save the decorated function in the session object.
-        '''
-        session['ldf'] = {
-            'name': func.__name__,
-            'kwargs': kwargs
-        }
-
-        if not current_user.is_authenticated:
-            return current_app.login_manager.unauthorized()
-
-        session.pop('ldf', None)
-        return func(*args, **kwargs)
-
-    return decorated_view
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+           ref_url.netloc == test_url.netloc
 
 
 def make_celery(app):

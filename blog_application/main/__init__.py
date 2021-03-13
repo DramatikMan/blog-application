@@ -2,13 +2,13 @@ import os
 import json
 
 from flask import Blueprint
-from flask import redirect, url_for, render_template, flash, jsonify
-from flask import current_app, session
+from flask import redirect, url_for, render_template, flash, jsonify, abort
+from flask import current_app, session, request
 from flask_login import login_user, logout_user, current_user
 from flask_principal import Identity, AnonymousIdentity, identity_changed
 
 from ..models import db, User
-from ..extensions import admin_permission
+from ..extensions import admin_permission, is_safe_url
 from ..forms import LoginForm, RegisterForm
 
 
@@ -31,6 +31,9 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('blog.home'))
 
+    if 'next_url' not in session:
+        session['next_url'] = request.args.get('next')
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -42,16 +45,10 @@ def login():
             identity=Identity(user.id)
         )
 
-        kwargs = {}
-        if 'ldf' in session:
-            next_view = session['ldf']['name']
-            kwargs = session['ldf']['kwargs']
-            session.pop('ldf', None)
-        else:
-            next_view = 'home'
-
         flash('You have been logged in.', category='success')
-        return redirect(url_for('blog.' + next_view, **kwargs))
+        next = session['next_url'] or url_for('blog.home')
+        session.pop('next_url', None)
+        return redirect(next)
 
     return render_template('login.html', form=form)
 
@@ -85,11 +82,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        flash(
-            'Your user has been created, please log in.',
-            category='success'
-        )
-
+        flash('Your user has been created, please log in.', category='success')
         return redirect(url_for('.login'))
     else:
         return render_template('register.html', form=form)
@@ -105,7 +98,7 @@ def who_is_current_user():
 
 
 @bp_main.route('/flask_session', methods=['GET'])
-@admin_permission.require(http_exception=403)
+# @admin_permission.require(http_exception=403)
 def flask_session_info():
     fs_dict = {}
     for item in dir(session):
