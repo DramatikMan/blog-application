@@ -4,7 +4,7 @@ from flask_dance.contrib.google import make_google_blueprint
 from flask_dance.consumer import oauth_authorized, oauth_error
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from sqlalchemy.orm.exc import NoResultFound
-from ...models import db, User, OAuth
+from ..models import db, User, OAuth
 
 
 bp_google = make_google_blueprint(
@@ -13,7 +13,8 @@ bp_google = make_google_blueprint(
         'https://www.googleapis.com/auth/userinfo.email',
         'openid'
     ],
-    storage=SQLAlchemyStorage(OAuth, db.session, user=current_user)
+    storage=SQLAlchemyStorage(OAuth, db.session, user=current_user),
+    redirect_to='blog.home'
 )
 
 

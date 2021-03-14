@@ -11,11 +11,7 @@ from ..forms import CommentForm, PostForm
 from ..extensions import poster_permission, admin_permission
 
 
-bp_blog = Blueprint(
-    'blog',
-    __name__,
-    template_folder='templates/blog'
-)
+bp_blog = Blueprint('blog', __name__, template_folder='templates/blog')
 
 
 def sidebar_data():

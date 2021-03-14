@@ -9,6 +9,7 @@ from .extensions import migrate
 from .extensions import bcrypt
 from .extensions import login_manager
 from .extensions import principals
+from .api import rest_api
 from .extensions import make_celery
 
 from .extensions import datetimeformat
@@ -18,9 +19,9 @@ from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
 from .commands import bp_cmd
 from .blog import bp_blog
 from .main import bp_main
+from .api import bp_api
 from .oauth.google import bp_google
 
-from .api import rest_api
 from .tasks import on_reminder_save
 
 
@@ -49,6 +50,7 @@ def create_app():
     app.register_blueprint(bp_cmd)
     app.register_blueprint(bp_blog, url_prefix='/blog')
     app.register_blueprint(bp_main)
+    app.register_blueprint(bp_api, url_prefix='/api')
     app.register_blueprint(bp_google)
 
     @app.shell_context_processor
