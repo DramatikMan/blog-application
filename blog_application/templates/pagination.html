@@ -1,0 +1,65 @@
+{% macro render_pagination(pagination, endpoint) %}
+  {% if pagination.pages > 1 %}
+    <nav class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for(endpoint, page=1, **kwargs) }}">First</a>
+        </li>
+        <li class="page-item {% if pagination.page == 1 %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev().page, **kwargs) }}">&laquo;</a>
+        </li>
+
+        {% if pagination.page >=3 %}
+          <li class="page-item {% if pagination.page >= 4 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(endpoint, page=1, **kwargs) }}">
+              {% if pagination.page == 3 %}1{% else %}...{% endif %}
+            </a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >=4) and (pagination.page >= pagination.pages - 1) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages - 3, **kwargs) }}">{{ pagination.pages - 3 }}</a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >=5) and (pagination.page == pagination.pages) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages - 2, **kwargs) }}">{{ pagination.pages - 2 }}</a>
+          </li>
+        {% endif %}
+
+        {% for page in pagination.iter_pages(left_edge=0, left_current=1, right_current=2, right_edge=0) %}
+          {% if page %}
+            <li class="page-item {% if page == pagination.page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for(endpoint, page=page, **kwargs) }}">{{ page }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if (pagination.pages >= 3) and (pagination.page == 1) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=3, **kwargs) }}">3</a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >= 4) and (pagination.page <= 2) %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for(endpoint, page=4, **kwargs) }}">4</a>
+          </li>
+        {% endif %}
+        {% if (pagination.pages >= 5) and (pagination.page <= pagination.pages - 2) %}
+          <li class="page-item {% if pagination.page < pagination.pages - 2 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages, **kwargs) }}">
+              {% if pagination.page < pagination.pages - 2 %}...{% else %}{{ pagination.pages }}{% endif %}
+            </a>
+          </li>
+        {% endif %}
+
+        <li class="page-item {% if pagination.page == pagination.pages %}disabled{% endif %}">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.next().page, **kwargs) }}">&raquo;</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for(endpoint, page=pagination.pages, **kwargs) }}">Last</a>
+        </li>
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}

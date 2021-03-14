@@ -9,14 +9,8 @@ from .models import User
 
 
 class CommentForm(FlaskForm):
-    name = StringField(
-        'Name',
-        validators=[DataRequired(), Length(max=255)]
-    )
-    text = TextAreaField(
-        'Comment',
-        validators=[DataRequired()]
-    )
+    name = StringField('Name', [DataRequired(), Length(max=255)])
+    text = TextAreaField('Comment', [DataRequired()])
 
 
 class LoginForm(FlaskForm):
@@ -66,3 +60,7 @@ class RegisterForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', [DataRequired(), Length(max=255)])
     text = TextAreaField('Content')
+
+
+class ApiForm(FlaskForm):
+    request = StringField('Request', [DataRequired()])
