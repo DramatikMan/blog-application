@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+{% block title %}API{% endblock %}
+{% block link %}
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/api.css') }}">
+{% endblock %}
+{% block body %}
+<div class="row p-2 shadow rounded mb-3 justify-content-md-center">
+  <div class="col-8">
+    <p class="font-monospace fs-2 fw-bold text-center mt-3">Try it</p>
+    <div class="input-group mt-4">
+      <span class="input-group-text">/blog/</span>
+      <input class="form-control" id="req" name="request" placeholder="post/100" required type="text" value>
+      <button class="btn btn-primary" onclick="send_request()">request</button>
+    </div>
+    <div class="form-text">
+      You can also POST, PUT and DELETE. But first you will need to GET your auth token from /api/auth and send it with the payload.
+    </div>
+    <p class="mt-4">Response:</p>
+    <pre class="p-3 rounded" id="resp"></pre>
+</div>
+{% endblock %}
+{% block js %}
+  <script  src="{{ url_for('.static', filename='js/jquery-3.6.0.min.js') }}"></script>
+  <script>
+    function send_request() {
+      var content = jQuery('#req').val();
+      if (content == '') {content = 'post/100/';}
+      var url = window.location.href;
+      var call_url = url + content;
+      jQuery.ajax({
+        dataType: 'text',
+        url: call_url,
+        context: document.body
+      }).always(
+        function(text) {
+          if (text) {
+            var d = jQuery.parseJSON(text);
+            jQuery('#resp').text(JSON.stringify(d, null, 4));
+          }
+        }
+      );
+    }
+  </script>
+{% endblock %}

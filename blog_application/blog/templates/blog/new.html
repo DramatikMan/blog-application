@@ -3,7 +3,7 @@
 {% block body %}
   <div class="row p-2 shadow rounded mb-3">
     <h1 class="text-center">Create a new post</h1>
-    {{ form.render_form('.new_post', 'Submit') }}
+    {{ model_form.render('.new_post', 'Submit') }}
   </div>
 {% endblock %}
 {% block js %}

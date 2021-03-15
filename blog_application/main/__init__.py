@@ -98,7 +98,7 @@ def who_is_current_user():
 
 
 @bp_main.route('/flask_session', methods=['GET'])
-# @admin_permission.require(http_exception=403)
+@admin_permission.require(http_exception=403)
 def flask_session_info():
     fs_dict = {}
     for item in dir(session):

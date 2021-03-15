@@ -103,7 +103,6 @@ class PostApi(Resource):
 
         db.session.add(post)
         db.session.commit()
-
         return post.id, 201
 
     def delete(self, post_id=None):

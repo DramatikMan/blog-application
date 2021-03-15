@@ -60,7 +60,3 @@ class RegisterForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', [DataRequired(), Length(max=255)])
     text = TextAreaField('Content')
-
-
-class ApiForm(FlaskForm):
-    request = StringField('Request', [DataRequired()])

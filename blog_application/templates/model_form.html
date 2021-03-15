@@ -1,4 +1,4 @@
-{% macro render_form(endpoint, button_text) %}
+{% macro render(endpoint, button_text) %}
   <form method="POST" action="{{ url_for(endpoint, **kwargs) }}">
     {{ form.hidden_tag() }}
     {% for attr in form %}
@@ -11,9 +11,9 @@
           {% endif %}
           <span>{{ attr.label }}</span>
           {% if 'text' in attr.label | string %}
-            {{ attr(id='editor', class_='form-control') }}
+            {{ attr(id='editor', class='form-control') }}
           {% else %}
-            {{ attr(class_='form-control') }}
+            {{ attr(class='form-control') }}
           {% endif %}
         </div>
       {% endif %}

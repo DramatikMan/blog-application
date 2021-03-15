@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template
+import requests
+import json
+
+from flask import Blueprint, render_template, request, jsonify
 
 from ..extensions import rest_api
 from .post import PostApi
@@ -17,9 +20,14 @@ rest_api.add_resource(
 )
 
 
-bp_api = Blueprint('api', __name__, template_folder='templates/api')
+bp_api = Blueprint(
+    'api',
+    __name__,
+    static_folder='static',
+    template_folder='templates/api'
+)
 
 
-@bp_api.route('/')
+@bp_api.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('api.html')
