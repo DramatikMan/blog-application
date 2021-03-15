@@ -1,0 +1,38 @@
+psql_dbname = 'blog-application'
+
+
+class Config():
+    # PostgreSQL
+    SQLALCHEMY_DATABASE_URI = f'postgresql://localhost:5432/{psql_dbname}'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'your_Flask_secret_key'
+
+    # recaptcha v2 keys
+    RECAPTCHA_PUBLIC_KEY = 'your_recaptcha_public_key'
+    RECAPTCHA_PRIVATE_KEY = 'your_recaptcha_private_key'
+
+    CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+    CELERY_RESULT_BACKEND = 'rpc://'
+
+    # Google OAuth2
+    GOOGLE_OAUTH_CLIENT_ID = 'your_google_oauth_client_id'
+    GOOGLE_OAUTH_CLIENT_SECRET = 'your_google_oauth_client_secret'
+    OAUTHLIB_RELAX_TOKEN_SCOPE = True
+
+
+class ProdConfig(Config):
+    pass
+
+
+class DeveConfig(Config):
+    TEMPLATES_AUTO_RELOAD = True
+    OAUTHLIB_INSECURE_TRANSPORT = True
+    ADMIN_NAME = 'username'
+    ADMIN_PASSWORD = 'password'
+    ADMIN_EMAIL = 'example@example.com'
+
+
+class TestConfig(Config):
+    TEMPLATES_AUTO_RELOAD = True
+    OAUTHLIB_INSECURE_TRANSPORT = True
+    TESTING = True

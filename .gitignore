@@ -1,7 +1,7 @@
 .venv/
 migrations/
 tests/
-wsgi_scripts/
+wsgi_scripts/application.wsgi
 **/__pycache__/
 *.pyc
 **/sandbox.py
