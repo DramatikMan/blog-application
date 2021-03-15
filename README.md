@@ -1,5 +1,4 @@
-blog application
+<h2>Blog application.</h2>
 
-flask & deployment practice
-
-not running yet
+Flask application showcase.<br>
+Running at: https://sergeypavlov.dev/blog_app/
