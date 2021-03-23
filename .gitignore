@@ -1,9 +1,8 @@
 .venv/
 migrations/
 tests/
-wsgi_scripts/apache.wsgi
+wsgi_scripts/*.py
 **/__pycache__/
 *.pyc
 **/sandbox.py
-**/models_mdb.py
 config.py
