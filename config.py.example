@@ -1,9 +1,11 @@
 psql_dbname = 'blog-application'
+psql_user = 'psql_user_name'
+psql_pswd = 'psql_user_password'
 
 
 class Config():
     # PostgreSQL
-    SQLALCHEMY_DATABASE_URI = f'postgresql://localhost:5432/{psql_dbname}'
+    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_user}:{psql_pswd}@localhost:5432/{psql_dbname}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'your_Flask_secret_key'
 
