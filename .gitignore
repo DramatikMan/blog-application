@@ -2,6 +2,7 @@
 migrations/
 tests/
 wsgi_scripts/*.py
+wsgi_scripts/*.wsgi
 **/__pycache__/
 *.pyc
 **/sandbox.py
