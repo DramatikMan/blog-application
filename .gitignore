@@ -1,4 +1,5 @@
 .venv/
+Pipfile.lock
 migrations/
 tests/
 wsgi_scripts/*.py
