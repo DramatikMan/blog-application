@@ -18,6 +18,7 @@ celery = "<=4.4.6"
 flask-dance = "*"
 sqlalchemy-utils = "*"
 sqlalchemy = "<1.4.0"
+pytest = "*"
 
 [dev-packages]
 

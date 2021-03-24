@@ -53,3 +53,10 @@ def db_fill_all(all):
         db.session.add(new_post)
 
     db.session.commit()
+
+
+@bp_cmd.cli.command('db_restore')
+def db_restore():
+    '''[clear] and re[fill] the database with randomized content.'''
+    db_drop_all()
+    db_fill_all()
