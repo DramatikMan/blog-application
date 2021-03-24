@@ -17,8 +17,8 @@ flower = "<=0.9.5"
 celery = "<=4.4.6"
 flask-dance = "*"
 sqlalchemy-utils = "*"
+sqlalchemy = "<1.4.0"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
