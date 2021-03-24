@@ -2,8 +2,8 @@ import os
 import sys
 
 
-venv_str ='path/to/activate_this.py'
-app_str = 'path/to/the/app/module'
+venv_str ='/path/to/activate_this.py'
+app_str = '/path/to/the/app/module/'
 
 activate_this = os.path.abspath(venv_str)
 with open(activate_this) as file_:
