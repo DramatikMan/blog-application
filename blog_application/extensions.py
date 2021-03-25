@@ -1,5 +1,4 @@
 import datetime
-from functools import wraps
 from urllib.parse import urlparse, urljoin
 
 from flask import flash, redirect, url_for, session, current_app, request

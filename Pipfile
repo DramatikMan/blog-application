@@ -17,6 +17,7 @@ flask-dance = "*"
 sqlalchemy-utils = "*"
 sqlalchemy = "<1.4.0"
 pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
