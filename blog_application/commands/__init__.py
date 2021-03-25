@@ -26,7 +26,6 @@ def db_fill():
     role_3 = Role('default')
     db.session.bulk_save_objects([role_1, role_2, role_3])
 
-
     user = User(
         username=current_app.config['ADMIN_NAME'],
         email=current_app.config['ADMIN_EMAIL']
@@ -51,10 +50,3 @@ def db_fill():
         db.session.add(new_post)
 
     db.session.commit()
-
-
-@bp_cmd.cli.command('db_restore')
-def db_restore():
-    '''[clear] and re[fill] the database with randomized content.'''
-    db_clear()
-    db_fill()
