@@ -6,6 +6,7 @@ Pipfile.lock
 
 **/.pytest_cache
 .coverage
+htmlcov
 
 config.py
 wsgi_scripts/*.py
