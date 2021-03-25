@@ -1,5 +1,7 @@
 import pytest
 
+from blog_application.models import User
+
 
 def test_auth(app, client):
     payload = {
@@ -7,4 +9,6 @@ def test_auth(app, client):
         'password': app.config['ADMIN_PASSWORD']
     }
     response = client.post('/api/auth/', json=payload)
-    assert response.status_code == 200
+    json_data = response.get_json()
+    with app.app_context():
+        assert User.verify_auth_token(json_data['token']) == User.query.get(1)
