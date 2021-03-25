@@ -8,7 +8,6 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 from flask_principal import Principal, Permission, RoleNeed
 from flask_restful import Api
-from celery import Celery
 
 
 migrate = Migrate()
@@ -36,20 +35,3 @@ def is_safe_url(target):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
            ref_url.netloc == test_url.netloc
-
-
-def make_celery(app):
-    celery = Celery(
-        app.import_name,
-        backend=app.config['CELERY_RESULT_BACKEND'],
-        broker=app.config['CELERY_BROKER_URL']
-    )
-    celery.conf.update(app.config)
-
-    class ContextTask(celery.Task):
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return self.run(*args, **kwargs)
-
-    celery.Task = ContextTask
-    return celery

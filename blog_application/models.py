@@ -158,13 +158,3 @@ class Role(db.Model):
 
     def __repr__(self):
         return f"<Role '{self.name}'>"
-
-
-class Reminder(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    dt = db.Column(db.DateTime())
-    email = db.Column(db.String())
-    text = db.Column(db.Text())
-
-    def __repr__(self):
-        return f"<Reminder '{self.text[:20]}'>"

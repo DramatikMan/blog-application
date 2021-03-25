@@ -10,19 +10,16 @@ from .extensions import bcrypt
 from .extensions import login_manager
 from .extensions import principals
 from .api import rest_api
-from .extensions import make_celery
 
 from .extensions import datetimeformat
 
-from .models import db, tags, roles, User, Post, Comment, Tag, Role, Reminder
+from .models import db, tags, roles, User, Post, Comment, Tag, Role
 
 from .commands import bp_cmd
 from .blog import bp_blog
 from .main import bp_main
 from .api import bp_api
 from .oauth.google import bp_google
-
-from .tasks import on_reminder_save
 
 
 flask_env = os.environ.get('FLASK_ENV')
@@ -34,18 +31,15 @@ def create_app():
 
     app.config.from_object('config.' + cfg)
     app.url_map.strict_slashes = False
+    app.jinja_env.filters['datetimeformat'] = datetimeformat
 
     db.init_app(app)
-    event.listen(Reminder, 'after_insert', on_reminder_save)
-
-    app.jinja_env.filters['datetimeformat'] = datetimeformat
 
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     principals.init_app(app)
     rest_api.init_app(app)
-    celery = make_celery(app)
 
     app.register_blueprint(bp_cmd)
     app.register_blueprint(bp_blog, url_prefix='/blog')
