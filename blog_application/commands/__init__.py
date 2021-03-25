@@ -11,15 +11,13 @@ bp_cmd = Blueprint('cmd', __name__, cli_group=None)
 
 
 @bp_cmd.cli.command('db_clear')
-@click.argument('all')
-def db_drop_all(all):
+def db_clear():
     '''Drop all tables from the connected database.'''
     db.drop_all()
 
 
 @bp_cmd.cli.command('db_fill')
-@click.argument('all')
-def db_fill_all(all):
+def db_fill():
     '''Create all tables and fill them with example data.'''
     db.create_all()
 
@@ -58,5 +56,5 @@ def db_fill_all(all):
 @bp_cmd.cli.command('db_restore')
 def db_restore():
     '''[clear] and re[fill] the database with randomized content.'''
-    db_drop_all()
-    db_fill_all()
+    db_clear()
+    db_fill()
