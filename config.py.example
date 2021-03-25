@@ -21,6 +21,11 @@ class Config():
     GOOGLE_OAUTH_CLIENT_SECRET = 'your_google_oauth_client_secret'
     OAUTHLIB_RELAX_TOKEN_SCOPE = True
 
+    # blog admin account credentials:
+    ADMIN_NAME = 'username'
+    ADMIN_PASSWORD = 'password'
+    ADMIN_EMAIL = 'example@example.com'
+
 
 class ProdConfig(Config):
     pass
@@ -29,9 +34,6 @@ class ProdConfig(Config):
 class DeveConfig(Config):
     TEMPLATES_AUTO_RELOAD = True
     OAUTHLIB_INSECURE_TRANSPORT = True
-    ADMIN_NAME = 'username'
-    ADMIN_PASSWORD = 'password'
-    ADMIN_EMAIL = 'example@example.com'
 
 
 class TestConfig(Config):

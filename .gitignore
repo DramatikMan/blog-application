@@ -1,17 +1,17 @@
-**/__pycache__/
-*.pyc
-**/.pytest_cache/
-
-.venv/
+.venv
 Pipfile.lock
 
-migrations/
-tests/
+**/__pycache__
+*.pyc
+
+**/.pytest_cache
+.coverage
 
 config.py
 wsgi_scripts/*.py
 wsgi_scripts/*.wsgi
 
+migrations
 blog_application/models_mdb.py
 blog_application/tasks.py
 **/sandbox.py
