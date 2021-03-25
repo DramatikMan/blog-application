@@ -8,4 +8,5 @@ wsgi_scripts/*.wsgi
 **/__pycache__/
 *.pyc
 **/sandbox.py
+blog_application/models_mdb.py
 blog_application/tasks.py
