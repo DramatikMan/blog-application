@@ -75,7 +75,7 @@ class PostApi(Resource):
 
     def put(self, post_id=None):
         if not post_id:
-            abort(401)
+            abort(405)
 
         post = Post.query.get(post_id)
         if not post:
