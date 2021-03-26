@@ -86,7 +86,7 @@ class PostApi(Resource):
         if not user:
             abort(401)
         if user != post.user:
-            flask.abort(403)
+            abort(403)
 
         if args['title']:
             post.title = args['title']
