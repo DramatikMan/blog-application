@@ -6,6 +6,12 @@ def test_POST_405_url_with_id(client):
     assert response.status_code == 405
 
 
+def test_POST_400_bad_payload(client):
+    payload = {'bad_payload': 'value'}
+    response = client.post('/api/post/', json=payload)
+    assert response.status_code == 400
+
+
 def test_POST_401_bad_token(client):
     payload = {
         'title': 'Post 101',
