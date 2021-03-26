@@ -36,5 +36,5 @@ def test_posts_POST_201(client):
             'tags': 'pytest',
             'token': session['token']
         }
-    response = client.post('/api/post/', json=payload)
-    assert response.status_code == 201
+    resp_json = client.post('/api/post/', json=payload).get_json()
+    assert resp_json, response.status_code == [101, 201]
