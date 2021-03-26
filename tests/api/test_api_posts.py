@@ -77,7 +77,7 @@ def test_posts_PUT_201(client):
         payload = {
             'title': 'Post Edited',
             'text': 'Example text',
-            'tags': ['Python', 'Flask', 'Jinja', 'SQLAlchemy', 'pytest'],
+            'tags': ['Python', 'Flask', 'Jinja', 'SQLAlchemy', 'сoverage'],
             'token': session['token']
         }
     resp_json = client.put('/api/post/1', json=payload).get_json()
