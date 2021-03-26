@@ -94,7 +94,7 @@ class PostApi(Resource):
             post.text = args['text']
         if args['tags']:
             for item in args['tags']:
-                tag = Tag.query.filter_by(title=item).one()
+                tag = Tag.query.filter_by(title=item).first()
                 if tag:
                     if tag not in post.tags:
                         post.tags.append(tag)
