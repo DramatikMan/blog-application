@@ -14,3 +14,12 @@ def test_getting_valid_token(app, client):
         session['token'] = json_data['token']
     with app.app_context():
         assert User.verify_auth_token(json_data['token']) == User.query.get(1)
+
+
+def test_401_wrong_password(app, client):
+    payload = {
+        'username': 'Random User',
+        'password': 'wrong_password'
+    }
+    response = client.post('/api/auth/', json=payload)
+    assert response.status_code == 401
