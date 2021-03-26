@@ -44,3 +44,18 @@ def test_posts_POST_201(client, tag_name):
 def test_posts_PUT_401(client):
     response = client.put('/api/post/')
     assert response.status_code == 401
+
+
+def test_posts_PUT_404(client):
+    response = client.put('/api/post/999')
+    assert response.status_code == 404
+
+
+def test_posts_PUT_user_401(client):
+    payload = {
+        'title': 'Post 101',
+        'text': 'Example text',
+        'token': 'wrong'
+    }
+    response = client.put('/api/post/101', json=payload)
+    assert response.status_code == 401
