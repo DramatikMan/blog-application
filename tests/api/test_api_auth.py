@@ -3,7 +3,7 @@ import pytest
 from blog_application.models import User
 
 
-def test_auth(app, client):
+def test_getting_valid_token(app, client):
     payload = {
         'username': app.config['ADMIN_NAME'],
         'password': app.config['ADMIN_PASSWORD']

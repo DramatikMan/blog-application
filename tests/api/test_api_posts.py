@@ -2,22 +2,22 @@ import pytest
 
 
 @pytest.mark.parametrize('post_id', ['', '100'])
-def test_posts_GET_200(client, post_id):
+def test_GET_200_all_or_specific(client, post_id):
     response = client.get('/api/post/' + post_id)
     assert response.status_code == 200
 
 
-def test_posts_GET_404(client):
+def test_GET_404_nonexistent_id(client):
     response = client.get('/api/post/101')
     assert response.status_code == 404
 
 
-def test_posts_POST_405(client):
+def test_POST_405_url_with_id(client):
     response = client.post('/api/post/101')
     assert response.status_code == 405
 
 
-def test_posts_POST_401(client):
+def test_POST_401_bad_token(client):
     payload = {
         'title': 'Post 101',
         'text': 'Example text',
@@ -29,7 +29,7 @@ def test_posts_POST_401(client):
 
 
 @pytest.mark.parametrize('tag_name', ['Python', 'pytest'])
-def test_posts_POST_201(client, tag_name):
+def test_POST_201_created(client, tag_name):
     with client.session_transaction() as session:
         payload = {
             'title': 'Post 101',
@@ -41,17 +41,17 @@ def test_posts_POST_201(client, tag_name):
     assert resp_json, response.status_code == [101, 201]
 
 
-def test_posts_PUT_401(client):
+def test_PUT_405_no_post_id(client):
     response = client.put('/api/post/')
-    assert response.status_code == 401
+    assert response.status_code == 405
 
 
-def test_posts_PUT_404(client):
+def test_PUT_404_nonexistent_id(client):
     response = client.put('/api/post/999')
     assert response.status_code == 404
 
 
-def test_posts_PUT_user_401(client):
+def test_PUT_401_bad_token(client):
     payload = {
         'title': 'Post 101',
         'text': 'Example text',
@@ -61,7 +61,7 @@ def test_posts_PUT_user_401(client):
     assert response.status_code == 401
 
 
-def test_posts_PUT_user_403(client):
+def test_PUT_403_wrong_user(client):
     with client.session_transaction() as session:
         payload = {
             'title': 'Post Edited',
@@ -72,7 +72,7 @@ def test_posts_PUT_user_403(client):
     assert response.status_code == 403
 
 
-def test_posts_PUT_201(client):
+def test_PUT_201_edited(client):
     with client.session_transaction() as session:
         payload = {
             'title': 'Post Edited',
@@ -82,3 +82,7 @@ def test_posts_PUT_201(client):
         }
     resp_json = client.put('/api/post/1', json=payload).get_json()
     assert resp_json, response.status_code == [1, 201]
+
+
+# def test_posts_DELETE_400(client):
+#     response = client.get('/api/post/' + post_id)
