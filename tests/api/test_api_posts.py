@@ -70,3 +70,15 @@ def test_posts_PUT_user_403(client):
         }
     response = client.put('/api/post/100', json=payload)
     assert response.status_code == 403
+
+
+def test_posts_PUT_201(client):
+    with client.session_transaction() as session:
+        payload = {
+            'title': 'Post Edited',
+            'text': 'Example text',
+            'tags': ['Python', 'Flask', 'Jinja', 'SQLAlchemy', 'pytest'],
+            'token': session['token']
+        }
+    resp_json = client.put('/api/post/1', json=payload).get_json()
+    assert resp_json, response.status_code == [1, 201]

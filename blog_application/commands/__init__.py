@@ -47,7 +47,7 @@ def db_fill():
 
     for i in range(100):
         new_post = Post('Post ' + str(i + 1))
-        new_post.user = admin if i <= 50 else alt_user
+        new_post.user = admin if i <= 49 else alt_user
         new_post.publish_dt = datetime.datetime.now() + datetime.timedelta(seconds=i)
         new_post.text = 'Example text'
         new_post.tags = random.sample(tag_list, random.randint(1, 3))
