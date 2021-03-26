@@ -18,3 +18,10 @@ def test_DELETE_401_bad_token(client):
     payload = {'token': 'wrong'}
     response = client.delete('/api/post/1', json=payload)
     assert response.status_code == 401
+
+
+def test_DELETE_401_wrong_user(client):
+    with client.session_transaction() as session:
+        payload = {'token': session['token']}
+    response = client.delete('/api/post/100', json=payload)
+    assert response.status_code == 403
