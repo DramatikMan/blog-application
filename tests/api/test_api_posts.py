@@ -59,3 +59,14 @@ def test_posts_PUT_user_401(client):
     }
     response = client.put('/api/post/101', json=payload)
     assert response.status_code == 401
+
+
+def test_posts_PUT_user_403(client):
+    with client.session_transaction() as session:
+        payload = {
+            'title': 'Post Edited',
+            'text': 'Example text',
+            'token': session['token']
+        }
+    response = client.put('/api/post/100', json=payload)
+    assert response.status_code == 403
