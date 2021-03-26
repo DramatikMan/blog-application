@@ -28,13 +28,19 @@ def test_posts_POST_401(client):
     assert response.status_code == 401
 
 
-def test_posts_POST_201(client):
+@pytest.mark.parametrize('tag_name', ['Python', 'pytest'])
+def test_posts_POST_201(client, tag_name):
     with client.session_transaction() as session:
         payload = {
             'title': 'Post 101',
             'text': 'Example text',
-            'tags': 'pytest',
+            'tags': tag_name,
             'token': session['token']
         }
     resp_json = client.post('/api/post/', json=payload).get_json()
     assert resp_json, response.status_code == [101, 201]
+
+
+def test_posts_PUT_401(client):
+    response = client.put('/api/post/')
+    assert response.status_code == 401
