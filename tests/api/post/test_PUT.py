@@ -8,6 +8,12 @@ def test_PUT_404_bad_id(client):
     assert response.status_code == 404
 
 
+def test_PUT_400_bad_payload(client):
+    payload = {'bad_payload': 'value'}
+    response = client.put('/api/post/100', json=payload)
+    assert response.status_code == 400
+
+
 def test_PUT_401_bad_token(client):
     payload = {
         'title': 'Post 101',
