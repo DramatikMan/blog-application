@@ -2,12 +2,12 @@ import pytest
 
 
 @pytest.mark.parametrize('post_id', ['', '100'])
-def test_GET_200_all_or_specific(client, post_id):
+def test_GET_200_all_or_id(client, post_id):
     response = client.get('/api/post/' + post_id)
     assert response.status_code == 200
 
 
-def test_GET_404_nonexistent_id(client):
+def test_GET_404_bad_id(client):
     response = client.get('/api/post/101')
     assert response.status_code == 404
 
@@ -41,12 +41,12 @@ def test_POST_201_created(client, tag_name):
     assert resp_json, response.status_code == [101, 201]
 
 
-def test_PUT_405_no_post_id(client):
+def test_PUT_405_no_id(client):
     response = client.put('/api/post/')
     assert response.status_code == 405
 
 
-def test_PUT_404_nonexistent_id(client):
+def test_PUT_404_bad_id(client):
     response = client.put('/api/post/999')
     assert response.status_code == 404
 
@@ -84,5 +84,11 @@ def test_PUT_201_edited(client):
     assert resp_json, response.status_code == [1, 201]
 
 
-# def test_posts_DELETE_400(client):
-#     response = client.get('/api/post/' + post_id)
+def test_DELETE_405_no_id(client):
+    response = client.delete('/api/post/')
+    assert response.status_code == 405
+
+
+def test_DELETE_404_bad_id(client):
+    response = client.delete('/api/post/999')
+    assert response.status_code == 404
