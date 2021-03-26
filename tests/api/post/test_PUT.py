@@ -43,5 +43,5 @@ def test_PUT_201_edited(client):
             'tags': ['Python', 'Flask', 'Jinja', 'SQLAlchemy', 'сoverage'],
             'token': session['token']
         }
-    resp_json = client.put('/api/post/1', json=payload).get_json()
+    resp_json = client.put('/api/post/2', json=payload).get_json()
     assert resp_json, response.status_code == [1, 201]
