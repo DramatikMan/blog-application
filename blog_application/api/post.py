@@ -108,7 +108,7 @@ class PostApi(Resource):
 
     def delete(self, post_id=None):
         if not post_id:
-            abort(400)
+            abort(405)
 
         post = Post.query.get(post_id)
         if not post:
