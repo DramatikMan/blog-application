@@ -26,14 +26,18 @@ def db_fill():
     role_3 = Role('default')
     db.session.bulk_save_objects([role_1, role_2, role_3])
 
-    user = User(
+    admin = User(
         username=current_app.config['ADMIN_NAME'],
         email=current_app.config['ADMIN_EMAIL']
     )
-    user.set_password(current_app.config['ADMIN_PASSWORD'])
-    admin = Role.query.filter_by(name='admin').one()
-    user.roles.append(admin)
-    db.session.add(user)
+    admin.set_password(current_app.config['ADMIN_PASSWORD'])
+    role_admin = Role.query.filter_by(name='admin').one()
+    admin.roles.append(role_admin)
+    db.session.add(admin)
+
+    alt_user = User('Random User')
+    alt_user.set_password('no_brute_force_please')
+    db.session.add(alt_user)
 
     tag_one = Tag('Python')
     tag_two = Tag('Flask')
@@ -43,7 +47,7 @@ def db_fill():
 
     for i in range(100):
         new_post = Post('Post ' + str(i + 1))
-        new_post.user = user
+        new_post.user = admin if i <= 50 else alt_user
         new_post.publish_dt = datetime.datetime.now() + datetime.timedelta(seconds=i)
         new_post.text = 'Example text'
         new_post.tags = random.sample(tag_list, random.randint(1, 3))
