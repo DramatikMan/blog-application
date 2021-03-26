@@ -10,5 +10,7 @@ def test_auth(app, client):
     }
     response = client.post('/api/auth/', json=payload)
     json_data = response.get_json()
+    with client.session_transaction() as session:
+        session['token'] = json_data['token']
     with app.app_context():
         assert User.verify_auth_token(json_data['token']) == User.query.get(1)

@@ -28,13 +28,13 @@ def test_posts_POST_401(client):
     assert response.status_code == 401
 
 
-# def test_posts_POST_201(client):
-#     payload = {
-#         'title': 'Post 101',
-#         'text': 'Example text',
-#         'tags': 'pytest'
-#     }
-#     response = client.post('/api/post/', json=payload)
-#     print(response.data)
-#     # assert response.data['new_post.id'], response.status_code == [101, 201]
-#     assert False
+def test_posts_POST_201(client):
+    with client.session_transaction() as session:
+        payload = {
+            'title': 'Post 101',
+            'text': 'Example text',
+            'tags': 'pytest',
+            'token': session['token']
+        }
+    response = client.post('/api/post/', json=payload)
+    assert response.status_code == 201
