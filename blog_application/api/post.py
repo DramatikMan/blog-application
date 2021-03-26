@@ -116,6 +116,8 @@ class PostApi(Resource):
 
         args = post_delete_parser.parse_args(strict=True)
         user = User.verify_auth_token(args['token'])
+        if not user:
+            abort(401)
         if user != post.user:
             abort(403)
 
