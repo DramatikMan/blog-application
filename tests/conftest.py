@@ -12,7 +12,7 @@ def app():
     cli.invoke(db_fill)
     yield app
 
-    cli.invoke(db_clear)
+    # cli.invoke(db_clear)
 
 
 @pytest.fixture(scope='session')

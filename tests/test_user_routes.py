@@ -1,9 +1,13 @@
-from blog_application.models import Post
-# from blog_application.forms import PostForm
+from sqlalchemy import text
+
+from blog_application.models import db, Post, User
 from .utils import login, logout
 
 
 def test_login_logout(client):
+    response = client.post('/login', data={})
+    assert response.status_code != 302
+
     response = login(client, 'Random_User', 'no_brute_force_please')
     assert b'You have been logged in.' in response.data
 
@@ -35,3 +39,35 @@ def test_new_successful(app, client):
     with app.app_context():
         added_post = Post.query.filter_by(title='Testing Post').first()
     assert added_post
+
+
+def test_edit_unauthorized(client):
+    response = client.get('/blog/edit/25')
+    assert response.status_code == 403
+
+
+def test_edit_authorized(client):
+    response = client.get('/blog/edit/100')
+    assert response.status_code == 200
+
+
+def test_edit_successful(app, client):
+    payload = dict(title='Post Edited', text='Example text')
+    response = client.post('/blog/edit/100', data=payload, follow_redirects=True)
+    with app.app_context():
+        edited_post = Post.query.filter_by(id=100).first()
+    assert edited_post.title == 'Post Edited'
+
+
+def test_edit_no_role(app, client):
+    with app.app_context():
+        random_user = User.query.filter_by(username='Random_User').one()
+        s = text(f'''
+            DELETE FROM test.user_x_role
+            WHERE
+                user_id = {random_user.id}
+            AND role_id = 2
+        ''')
+        db.engine.execute(s)
+    response = client.post('/blog/edit/100')
+    assert response.status_code == 403
