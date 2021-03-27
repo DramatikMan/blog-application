@@ -6,10 +6,16 @@ from .utils import login, logout
 
 def test_login_logout(client):
     response = client.post('/login', data={})
-    assert response.status_code != 302
+    assert b'Enter your login credentials:' in response.data
 
     response = login(client, 'Random_User', 'no_brute_force_please')
     assert b'You have been logged in.' in response.data
+
+    response = client.get('/login')
+    assert response.status_code == 302
+
+    response = client.get('/register')
+    assert response.status_code == 302
 
     response = logout(client)
     assert b'You have been logged out.' in response.data
