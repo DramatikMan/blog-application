@@ -1,5 +1,3 @@
-import pytest
-
 from blog_application.models import User
 
 
