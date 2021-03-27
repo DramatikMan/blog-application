@@ -14,5 +14,5 @@ def test_GET_200_all_page(client):
 
 
 def test_GET_404_bad_id(client):
-    response = client.get('/api/post/101')
+    response = client.get('/api/post/999')
     assert response.status_code == 404
