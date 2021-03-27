@@ -16,7 +16,7 @@ def test_PUT_400_bad_payload(client):
 
 def test_PUT_401_bad_token(client):
     payload = dict(
-        title='Post Edited',
+        title='Post Edited from API',
         text='Example text',
         token='wrong'
     )
@@ -27,7 +27,7 @@ def test_PUT_401_bad_token(client):
 def test_PUT_403_wrong_user(client):
     with client.session_transaction() as session:
         payload = dict(
-            title='Post Edited',
+            title='Post Edited from API',
             text='Example text',
             token=session['token']
         )
