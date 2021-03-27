@@ -1,3 +1,6 @@
+from .utils import login, logout
+
+
 def test_login_logout(client):
     response = login(client, 'Random_User', 'no_brute_force_please')
     assert b'You have been logged in.' in response.data

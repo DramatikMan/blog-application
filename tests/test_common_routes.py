@@ -1,5 +1,4 @@
 from blog_application.models import Comment
-from .utils import login, logout
 
 
 def test_home(client):
