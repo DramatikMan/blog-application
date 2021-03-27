@@ -16,9 +16,9 @@ def test_getting_valid_token(app, client):
         assert User.verify_auth_token(json_data['token']) == User.query.get(1)
 
 
-def test_401_wrong_password(app, client):
+def test_401_wrong_password(client):
     payload = {
-        'username': 'Random User',
+        'username': 'Random_User',
         'password': 'wrong_password'
     }
     response = client.post('/api/auth/', json=payload)

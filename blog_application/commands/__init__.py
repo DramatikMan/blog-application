@@ -35,7 +35,7 @@ def db_fill():
     admin.roles.append(role_admin)
     db.session.add(admin)
 
-    alt_user = User('Random User')
+    alt_user = User('Random_User')
     alt_user.set_password('no_brute_force_please')
     db.session.add(alt_user)
 
