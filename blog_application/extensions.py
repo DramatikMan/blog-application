@@ -1,5 +1,4 @@
 import datetime
-from urllib.parse import urlparse, urljoin
 
 from flask import flash, redirect, url_for, session, current_app, request
 from flask_migrate import Migrate
@@ -27,10 +26,3 @@ default_permission = Permission(RoleNeed('default'))
 
 def datetimeformat(value, format='%d-%m-%Y %H:%M'):
     return value.strftime(format)
-
-
-def is_safe_url(target):
-    ref_url = urlparse(request.host_url)
-    test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ('http', 'https') and \
-           ref_url.netloc == test_url.netloc

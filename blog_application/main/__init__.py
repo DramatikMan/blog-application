@@ -8,7 +8,7 @@ from flask_login import login_user, logout_user, current_user
 from flask_principal import Identity, AnonymousIdentity, identity_changed
 
 from ..models import db, User
-from ..extensions import admin_permission, is_safe_url
+from ..extensions import admin_permission
 from ..forms import LoginForm, RegisterForm
 
 
