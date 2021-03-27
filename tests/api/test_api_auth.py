@@ -13,7 +13,9 @@ def test_getting_valid_token(app, client):
     with client.session_transaction() as session:
         session['token'] = json_data['token']
     with app.app_context():
-        assert User.verify_auth_token(json_data['token']) == User.query.get(1)
+        admin = User.query.get(1)
+        user_from_token = User.verify_auth_token(json_data['token'])
+    assert admin == user_from_token
 
 
 def test_401_wrong_password(client):
