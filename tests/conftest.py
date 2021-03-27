@@ -1,5 +1,3 @@
-import os
-
 import pytest
 
 from blog_application import create_app
