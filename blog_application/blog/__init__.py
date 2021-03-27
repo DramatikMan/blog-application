@@ -70,8 +70,6 @@ def edit_post(id):
 
         form.text.data = post.text
         return render_template('edit.html', form=form, post=post)
-    else:
-        abort(403)
 
 
 @bp_blog.route('/')
