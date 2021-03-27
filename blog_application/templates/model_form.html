@@ -24,7 +24,7 @@
         </div>
       {% endif %}
     {% endfor %}
-    <input class="btn btn-primary mt-3" type="submit" value="{{ button_text }}">
+    <input class="btn btn-primary mt-3" type="submit" value="{{ button_text }}" id="submit">
     {% if 'login' in endpoint %}
       <a class="btn btn-primary mt-3" href="{{ url_for('main.register') }}">Sign up</a>
       <div class="row-sm mt-3">
