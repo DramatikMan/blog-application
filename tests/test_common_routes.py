@@ -36,17 +36,3 @@ def test_tag_page(client):
     assert response.status_code == 200
     assert b'Posts by tag: &laquo;Flask&raquo;' in response.data
     assert b'First' in response.data
-
-
-def test_login_logout(app, client):
-    response = login(client, 'Random_User', 'no_brute_force_please')
-    assert b'You have been logged in.' in response.data
-
-    response = logout(client)
-    assert b'You have been logged out.' in response.data
-
-    response = login(client, 'Random_User' + 'x', 'no_brute_force_please')
-    assert b'Invalid username or password' in response.data
-
-    response = login(client, 'Random_User', 'no_brute_force_please' + 'x')
-    assert b'Invalid username or password' in response.data
