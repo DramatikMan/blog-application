@@ -8,6 +8,7 @@ from blog_application.commands import db_fill, db_clear
 def app():
     app = create_app()
     cli = app.test_cli_runner()
+    cli.invoke(db_clear)
     cli.invoke(db_fill)
     yield app
 
