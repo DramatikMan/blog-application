@@ -16,7 +16,7 @@ def test_PUT_400_bad_payload(client):
 
 def test_PUT_401_bad_token(client):
     payload = dict(
-        title='Post 101',
+        title='Post Edited',
         text='Example text',
         token='wrong'
     )
