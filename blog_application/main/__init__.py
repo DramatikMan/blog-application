@@ -86,21 +86,3 @@ def register():
         return redirect(url_for('.login'))
     else:
         return render_template('register.html', form=form)
-
-
-@bp_main.route('/current_user', methods=['GET'])
-@admin_permission.require(http_exception=403)
-def who_is_current_user():
-    cu_dict = {}
-    for item in dir(current_user):
-        cu_dict[str(item)] = str(getattr(current_user, str(item)))
-    return jsonify(cu_dict)
-
-
-@bp_main.route('/flask_session', methods=['GET'])
-@admin_permission.require(http_exception=403)
-def flask_session_info():
-    fs_dict = {}
-    for item in dir(session):
-        fs_dict[str(item)] = str(getattr(session, str(item)))
-    return jsonify(fs_dict)
