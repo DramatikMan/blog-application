@@ -14,7 +14,7 @@ def test_POST_400_bad_payload(client):
 
 def test_POST_401_bad_token(client):
     payload = dict(
-        title='Post 101',
+        title='New Post for API',
         text='Example text',
         tags='pytest',
         token='wrong'
@@ -27,7 +27,7 @@ def test_POST_401_bad_token(client):
 def test_POST_201_created(client, tag_name):
     with client.session_transaction() as session:
         payload = dict(
-            title='Post 101',
+            title='New Post for API',
             text='Example text',
             tags=tag_name,
             token=session['token']
