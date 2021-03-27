@@ -19,9 +19,6 @@ def test_getting_valid_token(app, client):
 
 
 def test_401_wrong_password(client):
-    payload = {
-        'username': 'Random_User',
-        'password': 'wrong_password'
-    }
+    payload = dict(username='Random_User', password='wrong_password')
     response = client.post('/api/auth/', json=payload)
     assert response.status_code == 401

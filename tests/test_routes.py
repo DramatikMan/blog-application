@@ -17,10 +17,7 @@ def test_post_page(client):
 
 
 def test_add_comment(app, client):
-    payload = {
-        'name': 'tester',
-        'text': 'Example comment'
-    }
+    payload = dict(name='tester', text='Example comment')
     client.post('/blog/post/100', data=payload)
     with app.app_context():
         added_comment = Comment.query.filter_by(text='Example comment').first()
