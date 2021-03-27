@@ -78,7 +78,6 @@ def register():
     if form.validate_on_submit():
         new_user = User(username=form.username.data)
         new_user.set_password(form.password.data)
-        # new_user.roles = ['']
         db.session.add(new_user)
         db.session.commit()
 
