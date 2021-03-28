@@ -1,6 +1,7 @@
 from sqlalchemy import text
 
 from blog_application.models import db, Post, User
+from blog_application.forms import RegisterForm
 from .utils import login, logout
 
 
@@ -25,6 +26,19 @@ def test_login_logout(client):
 
     response = login(client, 'Random_User', 'no_brute_force_please' + 'x')
     assert b'Invalid username or password' in response.data
+
+
+def test_sign_up(app, client):
+    payload = dict(
+        username='tester',
+        password='_8_chars',
+        confirm='_8_chars'
+    )
+    response = client.post('/register', data=payload, follow_redirects=True)
+    with app.app_context():
+        registered = User.query.filter_by(username='tester').one()
+    assert registered
+    assert b'Enter your login credentials:' in response.data
 
 
 def test_new_unauthorized(client):

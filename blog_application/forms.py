@@ -1,3 +1,5 @@
+import os
+
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField
 from wtforms import TextAreaField
@@ -42,7 +44,8 @@ class RegisterForm(FlaskForm):
         DataRequired(),
         EqualTo('password')
     ])
-    recaptcha = RecaptchaField()
+    if os.environ['FLASK_ENV'] != 'testing':
+        recaptcha = RecaptchaField()
 
     def validate(self):
         check_validate = super().validate()
