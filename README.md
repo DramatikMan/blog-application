@@ -1,6 +1,7 @@
 <h1>Blog application </h1>
 
-![example workflow](https://github.com/DramatikMan/blog-application/actions/workflows/test.yml/badge.svg)
+[![test](https://github.com/DramatikMan/blog-application/actions/workflows/test.yml/badge.svg)](https://github.com/DramatikMan/blog-application/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/DramatikMan/blog-application/branch/main/graph/badge.svg?token=FZKPN2B08Y)](https://codecov.io/gh/DramatikMan/blog-application)
 
 ⚱ Flask application showcase.<br>
 Running at: https://sergeypavlov.dev/blog_app/
