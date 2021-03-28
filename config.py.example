@@ -37,3 +37,4 @@ class TestConfig(Config):
     TEMPLATES_AUTO_RELOAD = True
     OAUTHLIB_INSECURE_TRANSPORT = True
     TESTING = True
+    WTF_CSRF_ENABLED = False
