@@ -1,8 +1,4 @@
-import requests
-import json
-
-from flask import Blueprint, render_template, request, jsonify
-
+from flask import Blueprint, render_template
 from ..extensions import rest_api
 from .post import PostApi
 from .auth import AuthApi
