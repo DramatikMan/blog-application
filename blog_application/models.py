@@ -17,12 +17,14 @@ schema = 'test' if os.environ['FLASK_ENV'] == 'testing' else 'public'
 db = SQLAlchemy(metadata=MetaData(schema=schema))
 
 
-tags = db.Table('post_x_tags',
+tags = db.Table(
+    'post_x_tags',
     db.Column('post_id', db.Integer(), db.ForeignKey('post.id')),
     db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id')),
     db.UniqueConstraint('post_id', 'tag_id')
 )
-roles = db.Table('user_x_role',
+roles = db.Table(
+    'user_x_role',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
     db.UniqueConstraint('user_id', 'role_id')
