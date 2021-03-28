@@ -33,4 +33,4 @@ def test_POST_201_created(client, tag_name):
             token=session['token']
         )
     resp_json = client.post('/api/post/', json=payload).get_json()
-    assert resp_json, response.status_code == [101, 201]
+    assert resp_json, resp_json .status_code == [101, 201]
