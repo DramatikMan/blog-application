@@ -1,6 +1,5 @@
 import random
 import datetime
-import click
 
 from flask import Blueprint, current_app
 
