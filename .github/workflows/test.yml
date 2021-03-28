@@ -37,7 +37,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Set up configuration
-      run: >-
+      run: |
         mv config.py.example config.py
         export FLASK_APP='blog_application'
         export FLASK_ENV='testing'
