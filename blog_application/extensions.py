@@ -1,7 +1,6 @@
-from flask import flash, redirect, url_for, session, current_app, request
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from flask_principal import Principal, Permission, RoleNeed
 from flask_restful import Api
 
