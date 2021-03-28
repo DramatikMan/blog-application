@@ -1,4 +1,3 @@
-import os
 import datetime
 
 from flask import Blueprint, redirect, url_for, render_template, abort
