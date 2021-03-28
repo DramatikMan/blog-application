@@ -16,10 +16,10 @@ flask-restful = "*"
 flask-dance = "*"
 sqlalchemy-utils = "*"
 sqlalchemy = "<1.4.0"
+
+[dev-packages]
 pytest = "*"
 pytest-cov = "*"
 pytest-selenium = "*"
-
-[dev-packages]
 
 [requires]
