@@ -28,7 +28,32 @@ def test_login_logout(client):
     assert b'Invalid username or password' in response.data
 
 
-def test_sign_up(app, client):
+def test_sign_up_page(client):
+    response = client.get('/register')
+    assert response.status_code == 200
+
+
+def test_sign_up_already_exists(client):
+    payload = dict(
+        username='Random_User',
+        password='_8_chars',
+        confirm='_8_chars'
+    )
+    response = client.post('/register', data=payload, follow_redirects=True)
+    assert b'User with that name already exists.' in response.data
+
+
+def test_sign_up_short_pswd(client):
+    payload = dict(
+        username='tester',
+        password='short',
+        confirm='short'
+    )
+    response = client.post('/register', data=payload, follow_redirects=True)
+    assert b'Field must be at least 8 characters long.' in response.data
+
+
+def test_sign_up_success(app, client):
     payload = dict(
         username='tester',
         password='_8_chars',
