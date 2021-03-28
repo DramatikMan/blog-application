@@ -21,13 +21,13 @@ bp_google = make_google_blueprint(
 @oauth_authorized.connect_via(bp_google)
 def google_logged_in(blueprint, token):
     if not token:
-        flask('Failed to log in.', category='danger')
+        flash('Failed to log in.', category='danger')
         return False
 
     resp = blueprint.session.get('/oauth2/v1/userinfo')
     if not resp.ok:
         msg = 'Failed to fetch user info.'
-        flask(msg, category='danger')
+        flash(msg, category='danger')
         return False
 
     info = resp.json()
@@ -62,5 +62,8 @@ def google_logged_in(blueprint, token):
 
 @oauth_error.connect_via(bp_google)
 def google_error(blueprint, message, response):
-    msg = (f'OAuth error from {blueprint.name}! ' f'message={message} response={response}')
+    msg = (
+        f'OAuth error from {blueprint.name}! '
+        f'message={message} response={response}'
+    )
     flash(msg, category="danger")
