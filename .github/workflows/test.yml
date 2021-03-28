@@ -20,7 +20,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: blog_application
+          POSTGRES_DB: blog-application
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -30,8 +30,8 @@ jobs:
           - 5432:5432
 
     env:
-      FLASK_APP: 'blog_application'
-      FLASK_ENV: 'testing'
+      FLASK_APP: blog_application
+      FLASK_ENV: testing
 
     steps:
     - uses: actions/checkout@v2
