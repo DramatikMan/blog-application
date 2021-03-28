@@ -1,6 +1,6 @@
 psql_dbname = 'blog-application'
-psql_user = 'psql_user_name'
-psql_pswd = 'psql_user_password'
+psql_user = 'postgres'
+psql_pswd = 'postgres'
 
 
 class Config():
