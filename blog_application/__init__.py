@@ -3,7 +3,6 @@ import os
 from flask import Flask
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
-from sqlalchemy import event
 
 from .extensions import migrate
 from .extensions import bcrypt
