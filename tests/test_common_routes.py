@@ -40,3 +40,9 @@ def test_tag_page(client):
     assert response.status_code == 200
     assert b'Posts by tag: &laquo;Flask&raquo;' in response.data
     assert b'First' in response.data
+
+
+def test_api_page(client):
+    response = client.get('/api')
+    assert response.status_code == 200
+    assert b'Try it' in response.data
