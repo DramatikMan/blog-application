@@ -1,5 +1,3 @@
-import datetime
-
 from flask import flash, redirect, url_for, session, current_app, request
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
