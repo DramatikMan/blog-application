@@ -21,5 +21,6 @@ sqlalchemy = "<1.4.0"
 pytest = "*"
 pytest-cov = "*"
 pytest-selenium = "*"
+flake8 = "*"
 
 [requires]
