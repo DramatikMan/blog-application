@@ -1,18 +1,21 @@
+# environment
 .venv
 Pipfile.lock
 
-**/__pycache__
+# python
+__pycache__
 *.pyc
 
-**/.pytest_cache
+# testing
+.pytest_cache
 .coverage
 htmlcov
 
+# configuration
 config.py
 wsgi_scripts/*.py
 wsgi_scripts/*.wsgi
 
+# local
 migrations
-blog_application/models_mdb.py
-blog_application/tasks.py
-**/sandbox.py
+sandbox.py
