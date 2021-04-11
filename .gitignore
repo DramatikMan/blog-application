@@ -1,3 +1,5 @@
+config.py
 htmlcov
+wsgi.py
 compose.dev.yaml
 compose.test.yaml
