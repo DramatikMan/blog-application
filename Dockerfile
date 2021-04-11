@@ -8,7 +8,7 @@ RUN ./pipenv_install.sh
 
 FROM base AS development
 COPY . .
-CMD pipenv run flask run
+CMD pipenv run flask db_fill && pipenv run flask run --host=0.0.0.0
 
 #FROM base AS production
-#COPY blog_application application
+#COPY blog_application blog_application
