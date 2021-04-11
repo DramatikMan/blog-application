@@ -1,21 +1,3 @@
-# environment
-.venv
-Pipfile.lock
-
-# python
-__pycache__
-*.pyc
-
-# testing
-.pytest_cache
-.coverage
 htmlcov
-
-# configuration
-config.py
-wsgi_scripts/*.py
-wsgi_scripts/*.wsgi
-
-# local
-migrations
-sandbox.py
+compose.dev.yaml
+compose.test.yaml
