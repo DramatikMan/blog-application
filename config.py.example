@@ -5,7 +5,7 @@ psql_pswd = 'postgres'
 
 class Config():
     # PostgreSQL
-    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_user}:{psql_pswd}@localhost:5432/{psql_dbname}'
+    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_user}:{psql_pswd}@postgres:5432/{psql_dbname}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'your_Flask_secret_key'
 
@@ -36,6 +36,6 @@ class DeveConfig(Config):
 class TestConfig(Config):
     TEMPLATES_AUTO_RELOAD = True
     OAUTHLIB_INSECURE_TRANSPORT = True
-    
+
     TESTING = True
     WTF_CSRF_ENABLED = False
