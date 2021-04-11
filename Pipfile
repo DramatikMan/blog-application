@@ -22,5 +22,3 @@ pytest = "*"
 pytest-cov = "*"
 pytest-selenium = "*"
 flake8 = "*"
-
-[requires]
