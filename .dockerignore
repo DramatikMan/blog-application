@@ -1,0 +1,13 @@
+.git
+.gitignore
+.github
+LICENSE
+README.md
+htmlcov
+
+### ~ Docker ~ ###
+.dockerignore
+Dockerfile
+compose.dev.yaml
+compose.test.yaml
+docker-compose.yaml
