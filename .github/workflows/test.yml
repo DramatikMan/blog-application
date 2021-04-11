@@ -28,6 +28,9 @@ jobs:
         mkdir .venv
         pipenv install --dev --skip-lock
 
+    - name: Set app configuration
+      run: mv config.py.example config.py
+
     - name: Lint with flake8
       run: |
         pipenv run flake8 blog_application --count --select=E9,F63,F7,F82 --show-source --statistics
