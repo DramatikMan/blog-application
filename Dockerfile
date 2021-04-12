@@ -12,4 +12,5 @@ CMD pipenv run flask db_fill && pipenv run flask run --host=0.0.0.0
 
 FROM base AS production
 COPY blog_application blog_application
+COPY config.py .
 CMD ./gunicorn.sh
