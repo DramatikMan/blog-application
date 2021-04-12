@@ -1,0 +1,41 @@
+services:
+
+    web:
+
+      build:
+        args:
+          - build_env=production
+        context: .
+        target: production
+
+      environment:
+        FLASK_APP: blog_application
+        FLASK_ENV: production
+
+      ports:
+        - 5020:8080
+
+    postgres:
+
+      image: postgres
+
+      environment:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: blog-application
+
+      volumes:
+        - psql_data:/var/lib/postgresql/data
+
+    # pgadmin:
+    #
+    #   image: dpage/pgadmin4
+    #
+    #   environment:
+    #     PGADMIN_DEFAULT_EMAIL: self@pg.admin
+    #     PGADMIN_DEFAULT_PASSWORD: pgadmin
+    #
+    #   ports:
+    #     - 5021:80
+
+volumes:
+  psql_data:
