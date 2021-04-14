@@ -15,7 +15,7 @@ flask-principal = "*"
 flask-restful = "*"
 flask-dance = "*"
 sqlalchemy-utils = "*"
-sqlalchemy = "<1.4.0"
+sqlalchemy = "*"
 
 [dev-packages]
 pytest = "*"
