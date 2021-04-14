@@ -4,11 +4,12 @@ services:
 
       build:
         args:
-          - build_env=production
+          build_env: production
         context: .
         target: production
 
       environment:
+        SCRIPT_NAME: /blog_app
         FLASK_APP: blog_application
         FLASK_ENV: production
 
