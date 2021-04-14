@@ -5,10 +5,12 @@ from flask_restful import Resource, fields, marshal_with
 
 from ..models import db, User, Post, Tag
 from .fields import HTMLField
-from .parsers import post_get_parser
-from .parsers import post_post_parser
-from .parsers import post_put_parser
-from .parsers import post_delete_parser
+from .parsers import (
+    post_get_parser,
+    post_post_parser,
+    post_put_parser,
+    post_delete_parser
+)
 
 
 nested_tag_fields = {

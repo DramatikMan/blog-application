@@ -4,16 +4,15 @@ from flask import Flask
 from flask_login import current_user
 from flask_principal import identity_loaded, UserNeed, RoleNeed
 
-from .extensions import migrate
-from .extensions import bcrypt
-from .extensions import login_manager
-from .extensions import principals
+from .extensions import (
+    migrate,
+    bcrypt,
+    login_manager,
+    principals,
+    datetimeformat
+)
 from .api import rest_api
-
-from .extensions import datetimeformat
-
 from .models import db, tags, roles, User, Post, Comment, Tag, Role
-
 from .commands import bp_cmd
 from .blog import bp_blog
 from .main import bp_main

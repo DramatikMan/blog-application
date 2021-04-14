@@ -4,6 +4,7 @@ from flask_dance.contrib.google import make_google_blueprint
 from flask_dance.consumer import oauth_authorized, oauth_error
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from sqlalchemy.orm.exc import NoResultFound
+
 from ..models import db, User, OAuth
 
 

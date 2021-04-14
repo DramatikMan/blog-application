@@ -5,10 +5,11 @@ from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import AnonymousUserMixin
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
-
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from itsdangerous import BadSignature
-from itsdangerous import SignatureExpired
+from itsdangerous import (
+    TimedJSONWebSignatureSerializer as Serializer,
+    BadSignature,
+    SignatureExpired
+)
 
 from .extensions import bcrypt, login_manager
 
