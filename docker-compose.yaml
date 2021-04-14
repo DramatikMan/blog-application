@@ -13,8 +13,8 @@ services:
         FLASK_APP: blog_app
         FLASK_ENV: production
 
-      ports:
-        - 5020:8080
+      volumes:
+        - stream:/tmp/blog_app
 
     postgres:
 
@@ -39,4 +39,5 @@ services:
     #     - 5021:80
 
 volumes:
+  stream:
   psql_data:
