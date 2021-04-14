@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy import text
 
-from blog_application import create_app
-from blog_application.commands import db_fill, db_clear
-from blog_application.models import db
+from blog_app import create_app
+from blog_app.commands import db_fill, db_clear
+from blog_app.models import db
 
 
 @pytest.fixture(scope='session')

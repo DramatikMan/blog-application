@@ -1,4 +1,4 @@
-from blog_application.models import Comment
+from blog_app.models import Comment
 
 
 def test_root(client):

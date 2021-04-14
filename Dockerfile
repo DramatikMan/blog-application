@@ -11,6 +11,6 @@ COPY . .
 CMD pipenv run flask db_fill && pipenv run devserver
 
 FROM base AS production
-COPY blog_application blog_application
+COPY blog_app blog_app
 COPY config.py .
 CMD ./gunicorn.sh

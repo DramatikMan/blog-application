@@ -1,7 +1,7 @@
 from sqlalchemy import text
 
-from blog_application.models import db, Post, User
-from blog_application.forms import RegisterForm
+from blog_app.models import db, Post, User
+from blog_app.forms import RegisterForm
 from .utils import login, logout
 
 

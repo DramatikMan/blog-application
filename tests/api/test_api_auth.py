@@ -1,4 +1,4 @@
-from blog_application.models import User
+from blog_app.models import User
 
 
 def test_getting_valid_token(app, client):

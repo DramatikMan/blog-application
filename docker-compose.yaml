@@ -10,7 +10,7 @@ services:
 
       environment:
         SCRIPT_NAME: /blog_app
-        FLASK_APP: blog_application
+        FLASK_APP: blog_app
         FLASK_ENV: production
 
       ports:

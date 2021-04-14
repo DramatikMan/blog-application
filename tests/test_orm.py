@@ -1,4 +1,4 @@
-from blog_application.models import User, Post, Comment, Tag, Role
+from blog_app.models import User, Post, Comment, Tag, Role
 
 def test_repr(app):
     with app.app_context():
