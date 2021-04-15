@@ -8,10 +8,16 @@ services:
         context: .
         target: production
 
+      env_file:
+        - secrets.env
+
       environment:
+        # WSGI
         SCRIPT_NAME: /blog_app
+        # Flask config
         FLASK_APP: blog_app
         FLASK_ENV: production
+        PSQL_DB: blog-application
 
       volumes:
         - stream:/tmp/blog_app
