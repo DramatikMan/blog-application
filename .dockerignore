@@ -5,8 +5,7 @@ LICENSE
 README.md
 htmlcov
 
-wsgi.example
-config.py.example
+*.env
 
 ### ~ Docker ~ ###
 .dockerignore
