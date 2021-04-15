@@ -1,5 +1,4 @@
-config.py
+secrets.env
 htmlcov
-wsgi.py
 compose.dev.yaml
 compose.test.yaml
