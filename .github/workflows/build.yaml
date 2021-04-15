@@ -32,8 +32,8 @@ jobs:
       - name: Build image & push to GHCR
         uses: docker/build-push-action@v2
         with:
-          build-args:
-            - build_env=production
+          build-args: |
+            build_env:production
           context: .
           target: production
           push: true
