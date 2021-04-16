@@ -12,28 +12,7 @@ jobs:
 
     steps:
 
-      - name: Get current latest image id
-        run: >
-          wget
-          --header="Authorization: token ${{ secrets.GHCR_PAT }}"
-          --header="Accept: application/vnd.github.v3+json"
-          -nv
-          -O - https://api.github.com/user/packages/container/${{ github.event.repository.name }}/versions
-          | python3 -c
-          "import os, sys, json;
-          data = json.load(sys.stdin);
-          latest_id = data[0]['id'];
-          print(f'LATEST_IMAGE_ID={latest_id}');"
-          >> ${GITHUB_ENV}
-
-      - name: Check latest image id
-        run: echo ${{ env.LATEST_IMAGE_ID }}
-
-      - name: Delete latest image
-        run: >
-          wget
-          --header="Authorization: token ${{ secrets.GHCR_PAT }}"
-          --header="Accept: application/vnd.github.v3+json"
-          --method=DELETE
-          -nv
-          -O - https://api.github.com/user/packages/container/${{ github.event.repository.name }}/versions/${{ env.LATEST_IMAGE_ID }}
+      - name: dump github context
+        run: echo ${GITHUB_CONTEXT}
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
