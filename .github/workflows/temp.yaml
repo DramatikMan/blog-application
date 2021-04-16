@@ -25,4 +25,4 @@ jobs:
           latest_id = data[0]['id'];
           print(latest_id);
           os.environ['LATEST_IMAGE_VERSION'] = str(latest_id);"
-          && echo ${{ env.LATEST_IMAGE_VERSION }}
+          && echo "${{ env.LATEST_IMAGE_VERSION }}"
