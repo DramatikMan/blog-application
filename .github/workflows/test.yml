@@ -43,7 +43,7 @@ jobs:
         pipenv install --dev --skip-lock
 
     - name: Set app configuration
-      run: bash -c 'while read -r line; do [[ ! ${line} =~ ^\#.*$ ]] && echo ${line} >> ${GITHUB_ENV}; done < example.env'
+      run: bash -c 'while read -r line; do [[ ${line} =~ ^\#.*$ ]] || echo ${line} >> ${GITHUB_ENV}; done < example.env'
 
     - name: Lint with flake8
       run: |
