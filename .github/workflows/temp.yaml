@@ -18,7 +18,7 @@ jobs:
           --header="Authorization: token ${{ secrets.GHCR_PAT }}"
           --header="Accept: application/vnd.github.v3+json"
           -nv
-          -O - https://api.github.com/user/packages/container/${{ github.repository.name }}/versions
+          -O - https://api.github.com/user/packages/container/blog-application/versions
           | python3 -c
           "import os, sys, json;
           data = json.load(sys.stdin);
@@ -29,9 +29,11 @@ jobs:
       - name: Check latest image id
         run: echo ${{ env.LATEST_IMAGE_ID }}
 
-      - name: Print repo name
-        run: echo ${{ github.repository.name }}
-
+      - name: Dump github context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          
       # - name: Delete latest image
       #   run: >
       #     wget
