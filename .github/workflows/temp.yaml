@@ -14,9 +14,9 @@ jobs:
 
       - name: Get current latest image id
         run: >
-          curl
-          -H 'Authorization: token ${GHCR_PAT}'
-          -H 'Accept: application/vnd.github.v3+json'
-          https://api.github.com/user/packages/container/blog-application/versions |
-          python3
-          -c "import sys, json; print(json.load(sys.stdin))"
+          wget
+          --header="Authorization: token ${GHCR_PAT}"
+          --header="Accept: application/vnd.github.v3+json"
+          -nv
+          -O - https://api.github.com/user/packages/container/blog-application/versions |
+          python3 -c "import sys, json; print(json.load(sys.stdin)[0]['id'])"
