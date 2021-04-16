@@ -1,0 +1,22 @@
+name: temp
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  temp:
+
+    name: temp
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Get current latest image id
+        run: >
+          curl
+          -H 'Authorization: token ${GHCR_PAT}'
+          -H 'Accept: application/vnd.github.v3+json'
+          https://api.github.com/user/packages/container/blog-application/versions |
+          python3
+          -c "import sys, json; print(json.load(sys.stdin)[0]['id'])"
