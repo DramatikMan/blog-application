@@ -23,6 +23,6 @@ jobs:
           "import os, sys, json;
           data = json.load(sys.stdin);
           latest_id = data[0]['id'];
-          print(latest_id)
-          os.environ['LATEST_IMAGE_VERSION'] = str(latest_id)"
+          print(latest_id);
+          os.environ['LATEST_IMAGE_VERSION'] = str(latest_id);"
           && echo $LATEST_IMAGE_VERSION
