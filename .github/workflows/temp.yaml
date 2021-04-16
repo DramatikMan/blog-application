@@ -22,5 +22,5 @@ jobs:
           | python3 -c
           "import os, sys, json;
           data = json.load(sys.stdin);
-          os.environ['LATEST_IMAGE_VERSION'] = data[0]['id']"
+          os.environ['LATEST_IMAGE_VERSION'] = str(data[0]['id'])"
           && echo $LATEST_IMAGE_VERSION
