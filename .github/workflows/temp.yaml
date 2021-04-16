@@ -1,7 +1,11 @@
 name: temp
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ['Test']
+    branches: [main]
+    types:
+      - completed
 
 jobs:
 
