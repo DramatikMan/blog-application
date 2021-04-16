@@ -15,7 +15,7 @@ jobs:
       - name: Get current latest image id
         run: >
           wget
-          --header="Authorization: token ${GHCR_PAT}"
+          --header="Authorization: token ${{ secrets.GHCR_PAT }}"
           --header="Accept: application/vnd.github.v3+json"
           -nv
           -O - https://api.github.com/user/packages/container/blog-application/versions |
