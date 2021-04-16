@@ -20,7 +20,7 @@ jobs:
           -nv
           -O - https://api.github.com/user/packages/container/${{ github.event.repository.name }}/versions
           | python3 -c
-          "import os, sys, json;
+          "import sys, json;
           data = json.load(sys.stdin);
           latest_id = data[0]['id'];
           print(f'LATEST_IMAGE_ID={latest_id}');"
