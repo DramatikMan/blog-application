@@ -19,7 +19,4 @@ jobs:
           --header="Accept: application/vnd.github.v3+json"
           -nv
           -O - https://api.github.com/user/packages/container/blog-application/versions |
-          python3 -c "
-            import sys, json
-            data = json.load(sys.stdin)
-            print(data)"
+          python3 -c "import sys, json; data = json.load(sys.stdin); print(data)"
