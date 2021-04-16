@@ -18,8 +18,9 @@ jobs:
           --header="Authorization: token ${{ secrets.GHCR_PAT }}"
           --header="Accept: application/vnd.github.v3+json"
           -nv
-          -O - https://api.github.com/user/packages/container/blog-application/versions |
-          python3 -c
-          "import sys, json;
+          -O - https://api.github.com/user/packages/container/blog-application/versions
+          | python3 -c
+          "import os, sys, json;
           data = json.load(sys.stdin);
-          print(data[0]['id'])"
+          os.environ['LATEST_IMAGE_VERSION'] = data[0]['id']"
+          && echo $LATEST_IMAGE_VERSION
