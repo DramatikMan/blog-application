@@ -23,6 +23,8 @@ jobs:
           "import os, sys, json;
           data = json.load(sys.stdin);
           latest_id = data[0]['id'];
-          print(latest_id);
-          os.environ['LATEST_IMAGE_VERSION'] = str(latest_id);"
-          && echo "${{ env.LATEST_IMAGE_VERSION }}"
+          print(f'LATEST_IMAGE_ID={latest_id}');"
+          >> ${GITHUB_ENV}
+
+      - name: Check variable
+        run: echo ${{ env.LATEST_IMAGE_ID }}
