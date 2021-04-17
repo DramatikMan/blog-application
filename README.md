@@ -1,4 +1,4 @@
-<h1>Blog application </h1>
+<h1>Blog application</h1>
 
 [![test](https://github.com/DramatikMan/blog-application/actions/workflows/test.yaml/badge.svg)](https://github.com/DramatikMan/blog-application/actions/workflows/test.yaml)
 [![codecov](https://codecov.io/gh/DramatikMan/blog-application/branch/main/graph/badge.svg?token=FZKPN2B08Y)](https://codecov.io/gh/DramatikMan/blog-application)
