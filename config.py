@@ -1,14 +1,17 @@
 import os
 
 
-psql_db = os.environ['PSQL_DB']
-psql_user = os.environ['PSQL_USER']
-psql_pswd = os.environ['PSQL_PASSWORD']
+# database
+host = os.environ['PSQL_HOST']
+port = os.environ['PSQL_PORT']
+db = os.environ['PSQL_DB']
+user = os.environ['PSQL_USER']
+pswd = os.environ['PSQL_PASSWORD']
 
 
 class Config():
     # PostgreSQL
-    SQLALCHEMY_DATABASE_URI = f'postgresql://{psql_user}:{psql_pswd}@postgres:5432/{psql_db}'
+    SQLALCHEMY_DATABASE_URI = f'postgresql://{user}:{pswd}@{host}:{port}/{db}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ['SECRET_KEY']
 
