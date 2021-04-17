@@ -12,12 +12,16 @@ services:
         - secrets.env
 
       environment:
-        # WSGI
+        # app mount path relative to host
         SCRIPT_NAME: /blog_app
         # Flask config
         FLASK_APP: blog_app
         FLASK_ENV: production
-        PSQL_DB: blog-application
+        # database config override if needed
+        # PSQL_HOST: postgres
+        # PSQL_PORT: 5432
+        # PSQL_USER: postgres
+        # PSQL_PASSWORD: postgres
 
       volumes:
         - stream:/tmp/blog_app
