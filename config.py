@@ -12,7 +12,7 @@ pswd = os.environ['PSQL_PASSWORD']
 class Config():
     SECRET_KEY = os.environ['SECRET_KEY']
 
-    # PostgreSQL
+    # SQLAlchemy
     SQLALCHEMY_DATABASE_URI = f'postgresql://{user}:{pswd}@{host}:{port}/{db}'
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
