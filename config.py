@@ -10,10 +10,12 @@ pswd = os.environ['PSQL_PASSWORD']
 
 
 class Config():
+    SECRET_KEY = os.environ['SECRET_KEY']
+
     # PostgreSQL
     SQLALCHEMY_DATABASE_URI = f'postgresql://{user}:{pswd}@{host}:{port}/{db}'
+    SQLALCHEMY_ENGINE_OPTIONS = {'pool_pre_ping': True}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.environ['SECRET_KEY']
 
     # recaptcha v2 keys
     RECAPTCHA_PUBLIC_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
