@@ -1,5 +1,5 @@
 secrets.env
 htmlcov
-compose.dev.yaml
-compose.test.yaml
-stack.deploy.yaml
+compose.dev.yml
+compose.test.yml
+stack.deploy.yml

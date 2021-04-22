@@ -1,6 +1,4 @@
-.git
-.gitignore
-.github
+.git*
 LICENSE
 README.md
 htmlcov
@@ -10,7 +8,4 @@ htmlcov
 ### ~ Docker ~ ###
 .dockerignore
 Dockerfile
-compose.dev.yaml
-compose.test.yaml
-docker-compose.yaml
-stack.deploy.yaml
+*.yml
