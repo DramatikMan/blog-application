@@ -20,14 +20,11 @@ from .api import bp_api
 from .oauth.google import bp_google
 
 
-flask_env = os.environ.get('FLASK_ENV')
-cfg = flask_env[:4].capitalize() + 'Config'
-
-
 def create_app():
     app = Flask(__name__)
 
-    app.config.from_object('config.' + cfg)
+    cfg = f"config.{os.environ.get('FLASK_ENV').capitalize()}Config"
+    app.config.from_object(cfg)
     app.url_map.strict_slashes = False
     app.jinja_env.filters['datetimeformat'] = datetimeformat
 

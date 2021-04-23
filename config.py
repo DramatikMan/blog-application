@@ -32,16 +32,16 @@ class Config():
     ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
 
 
-class ProdConfig(Config):
+class ProductionConfig(Config):
     pass
 
 
-class DeveConfig(Config):
+class DevelopmentConfig(Config):
     TEMPLATES_AUTO_RELOAD = True
     OAUTHLIB_INSECURE_TRANSPORT = True
 
 
-class TestConfig(Config):
+class TestingConfig(Config):
     TEMPLATES_AUTO_RELOAD = True
     OAUTHLIB_INSECURE_TRANSPORT = True
 
