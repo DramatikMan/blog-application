@@ -1,11 +1,18 @@
-.git*
-LICENSE
-README.md
+### ~ private ~ ###
+*.env
+
+### ~ testing ~ ###
 htmlcov
 
-*.env
+### ~ front-end ~ ###
+**/*.scss
 
 ### ~ Docker ~ ###
 .dockerignore
 Dockerfile
 *.yml
+
+### ~ GitHub ~ ###
+.git*
+LICENSE
+README.md
