@@ -27,16 +27,16 @@ jobs:
 
       - name: Get current latest image id
         run: >
-          wget
-          --header="Authorization: token ${{ secrets.GHCR_PAT }}"
-          --header="Accept: application/vnd.github.v3+json"
-          -nv
-          -O - https://api.github.com/user/packages/container/${{ github.event.repository.name }}/versions
-          | python3 -c
-          "import sys, json;
-          data = json.load(sys.stdin);
-          latest_id = data[0]['id'];
-          print(f'LATEST_IMAGE_ID={latest_id}');"
+          python -c
+          "import requests, json;
+          url = 'https://api.github.com/user/packages/container/${{ github.event.repository.name }}/versions';
+          headers = dict(
+              Authorization='token ${{ secrets.GHCR_PAT }}',
+              Accept='application/vnd.github.v3+json'
+          );
+          resp = requests.get(url, headers=headers);
+          print(f'IMAGE_EXISTED={1 if resp.status_code == 200 else 0}');
+          print(f'''LATEST_IMAGE_ID={resp.json()[0]['id'] if resp.status_code == 200 else None}''');"
           >> ${GITHUB_ENV}
 
       - name: Checkout
@@ -69,6 +69,7 @@ jobs:
           tags: ghcr.io/${{ env.REPO }}:latest
 
       - name: Delete previous image
+        if: ${{ env.IMAGE_EXISTED == 1}}
         run: >
           wget
           --header="Authorization: token ${{ secrets.GHCR_PAT }}"
