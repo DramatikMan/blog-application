@@ -23,8 +23,8 @@ services:
         # PSQL_USER: postgres
         # PSQL_PASSWORD: postgres
 
-      volumes:
-        - stream:/tmp/blog_app
+      ports:
+        - 8000:8000
 
     postgres:
 
@@ -49,5 +49,4 @@ services:
     #     - 5021:80
 
 volumes:
-  stream:
   psql_data:
