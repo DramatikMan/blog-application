@@ -2,11 +2,11 @@ import os
 
 
 # database
-host = os.environ['PSQL_HOST']
-port = os.environ['PSQL_PORT']
-db = os.environ['PSQL_DB']
-user = os.environ['PSQL_USER']
-pswd = os.environ['PSQL_PASSWORD']
+user = os.environ['POSTGRES_USER']
+pswd = os.environ['POSTGRES_PASSWORD']
+host = os.environ['POSTGRES_HOST']
+port = os.environ['POSTGRES_PORT']
+db = os.environ['POSTGRES_DB']
 
 
 class Config():
