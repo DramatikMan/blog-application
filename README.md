@@ -5,4 +5,3 @@
 [![build](https://github.com/DramatikMan/blog-application/actions/workflows/build.yml/badge.svg)](https://github.com/users/DramatikMan/packages/container/package/blog-application)
 
 ⚱ Flask application showcase.<br>
-Running at: https://sergeypavlov.dev/blog_app/
