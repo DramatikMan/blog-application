@@ -17,7 +17,7 @@ evs=(
 )
 for variable in "${evs[@]}"; do
 	if [[ -z ${!variable+x} ]] || [[ -z ${!variable} ]] ; then
-		echo -e "\e[93mEnvironmental variable \e[1m$variable\e[21m is not defined or is empty.\e[0m"
+		echo -e "\e[93mEnvironmental variable \e[1m$variable\e[21m is undefined or empty.\e[0m"
 		((undef++))
 	fi
 done
