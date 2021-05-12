@@ -8,6 +8,18 @@
 
 Current deployment setup:
 ```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-application
+data:
+  SCRIPT_NAME: /blog_app
+  FLASK_APP: blog_app
+  FLASK_ENV: production
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: '5432'
+  POSTGRES_DB: blog-application
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
