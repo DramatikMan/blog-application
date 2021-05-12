@@ -40,7 +40,7 @@ jobs:
       run: |
         pip install pipenv
         mkdir .venv
-        pipenv install --dev --skip-lock
+        pipenv install --dev #--skip-lock
 
     - name: Set app configuration
       run: bash -c '
